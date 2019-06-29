@@ -8,7 +8,8 @@ import Popup from './components/Popup';
 // // unregister() to register() below. Note this comes with some pitfalls.
 // // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
-
+/*global chrome*/
+chrome.storage.sync.clear();
 ReactDOM.render(
     <Popup />,
     document.getElementById('root') as HTMLElement
