@@ -2,6 +2,26 @@
   "name": "WebMark",
   "version": "0.1.0",
   "description": "Load a random page from your bookmarks!",
+  "permissions": [
+    "bookmarks",
+    "storage"
+  ],
+  "commands": {
+    "save": {
+      "suggested_key": {
+        "default": "Alt+S",
+        "mac": "Alt+S"
+      },
+      "description": "Save this page to bookmark"
+    },
+    "load": {
+      "suggested_key": {
+        "default": "Alt+Q",
+        "mac": "Alt+Q"
+      },
+      "description": "Load a random page from bookmark"
+    }
+  },
   "browser_action": {
     "default_popup": "index.html",
     "default_icon": "images/default.png"
