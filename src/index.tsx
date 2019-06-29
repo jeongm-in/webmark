@@ -31,8 +31,28 @@ var saveClicked = (): void => {
     );
 }
 
+var loadClicked = (): void => {
+    chrome.storage.sync.get(
+        ['webmarkFolderId'],
+        function (result) {
+            if (Object.keys(result).length === 0) {
+                console.log('webmarkFolderId not found.');
+                createWebmarkFolder();
+            } else {
+                console.log('webmarkFolderId found.');
+                let loadFunction: (url: string) => void;
+                loadFunction = loadHere() ? loadInCurrentTab : loadInNewTab;
+                let url: string = getRandomUrlFromFolder();
+                loadFunction(url);
+            }
+        }
+    );
+}
+
 let saveButton = document.getElementById('save') as HTMLElement;
+let loadButton = document.getElementById('load') as HTMLElement;
 saveButton.addEventListener('click', saveClicked);
+loadButton.addEventListener('click', loadClicked);
 
 // helper functions
 var createWebmarkFolder = (): void => {
@@ -89,6 +109,21 @@ var saveToWebmarkFolder = (url: string): void => {
     );
 }
 
+var loadHere = (): boolean => {
+    return true;
+}
+
+var getRandomUrlFromFolder = (): string => {
+    return 'https://random.url.com/';
+}
+
 var showNotice = (message: string): void => {
     console.log('Showed message ("' + message + '") to user.');
+}
+var loadInCurrentTab = (url: string): void => {
+    console.log('Opened ' + url + ' in the current tab.');
+}
+
+var loadInNewTab = (url: string): void => {
+    console.log('Opened ' + url + ' in a new tab.');
 }
