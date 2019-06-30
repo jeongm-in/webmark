@@ -52,10 +52,18 @@ var loadClicked = (): void => {
                         return;
                     }
                     console.log('webmark folder found.');
-                    let loadFunction: (url: string) => void;
-                    loadFunction = loadHere() ? loadInCurrentTab : loadInNewTab;
                     let url: string = getRandomUrlFromFolder();
-                    loadFunction(url);
+                    chrome.storage.sync.get(
+                        ['loadHere'],
+                        function (result) {
+                            if (Object.keys(result).length != 0 && result!['loadHere']) {
+                                loadInCurrentTab(url);
+                            }
+                            else {
+                                loadInNewTab(url);
+                            }
+                        }
+                    );
                 }
             );
         }
@@ -147,11 +155,6 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
             );
         }
     );
-}
-
-var loadHere = (): boolean => {
-    //TODO: implement loadHere
-    return true;
 }
 
 var getRandomUrlFromFolder = (): string => {
