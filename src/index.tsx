@@ -86,15 +86,24 @@ let getCurrentUrlAndSave = () => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            const thisTabUrl: string = typeCheckString(currentTab.url);
-            const thisTabTitle: string = typeCheckString(currentTab.title);
+            const thisTabUrl: string|undefined = currentTab.url;
+            const thisTabTitle: string|undefined = currentTab.title;
             saveToWebmarkFolder(thisTabUrl, thisTabTitle);
         });
 }
 
 
+var saveToWebmarkFolder = (url: string|undefined, title: string|undefined): void => {
 
-var saveToWebmarkFolder = (url: string, title: string): void => {
+    //TODO: find better way to sanitize input 
+    if (url == undefined) {
+        url= "https://example.com/error";
+    } 
+    if (title == undefined) {
+        title = "read later";
+    }
+
+
     chrome.storage.sync.get(
         ['webmarkFolderId'],
         function (result?) {
