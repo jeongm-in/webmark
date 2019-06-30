@@ -164,7 +164,11 @@ var showNotice = (message: string): void => {
     console.log('Showed message ("' + message + '") to user.');
 }
 var loadInCurrentTab = (url: string): void => {
-    //TODO: implement loadInCurrentTab
+    chrome.tabs.update(
+        {
+            'url': url,
+        }
+    );
     console.log('Opened ' + url + ' in the current tab.');
 }
 
