@@ -38,13 +38,26 @@ var loadClicked = (): void => {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
                 createWebmarkFolder();
-            } else {
-                console.log('webmarkFolderId found.');
-                let loadFunction: (url: string) => void;
-                loadFunction = loadHere() ? loadInCurrentTab : loadInNewTab;
-                let url: string = getRandomUrlFromFolder();
-                loadFunction(url);
+                return;
             }
+            console.log('webmarkFolderId found.');
+            let webmarkFolderId: string = result!['webmarkFolderId'];
+            chrome.bookmarks.get(
+                webmarkFolderId,
+                function () {
+                    if (chrome.runtime.lastError) {
+                        console.log('webmark folder not found.');
+                        createWebmarkFolder();
+                        chrome.storage.sync.remove('webmarkFolderId');
+                        return;
+                    }
+                    console.log('webmark folder found.');
+                    let loadFunction: (url: string) => void;
+                    loadFunction = loadHere() ? loadInCurrentTab : loadInNewTab;
+                    let url: string = getRandomUrlFromFolder();
+                    loadFunction(url);
+                }
+            );
         }
     );
 }
@@ -98,29 +111,40 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
                 createWebmarkFolder();
-            } else {
-                console.log('webmarkFolderId found.');
-                let webmarkFolderId: string = result!['webmarkFolderId'];
-                chrome.bookmarks.search(
-                    { 'url': url },
-                    function (results) {
-                        if (results === undefined || results.length == 0) {
-                            console.log('Same page not found in the folder.');
-                            chrome.bookmarks.create(
-                                {
-                                    'parentId': webmarkFolderId,
-                                    'url': url,
-                                    'title': title,
-                                }
-                            );
-                            console.log(url + ' saved to folder.');
-                        }
-                        else {
+                return;
+            }
+            console.log('webmarkFolderId found.');
+            let webmarkFolderId: string = result!['webmarkFolderId'];
+            chrome.bookmarks.get(
+                webmarkFolderId,
+                function () {
+                    if (chrome.runtime.lastError) {
+                        console.log('webmark folder not found.');
+                        createWebmarkFolder();
+                        chrome.storage.sync.remove('webmarkFolderId');
+                        return;
+                    }
+                    chrome.bookmarks.search(
+                        { 'url': url },
+                        function (results) {
+                            if (results == undefined || results.length == 0) {
+                                console.log('Same page not found in the folder.');
+                                chrome.bookmarks.create(
+                                    {
+                                        'parentId': webmarkFolderId,
+                                        'url': url,
+                                        'title': title,
+                                    }
+                                );
+                                console.log(url + ' saved to folder.');
+                                return;
+                            }
                             showNotice('The page is already in the folder.');
                         }
-                    }
-                )
-            }
+                    )
+
+                }
+            );
         }
     );
 }
