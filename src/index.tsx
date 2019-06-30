@@ -169,6 +169,10 @@ var loadInCurrentTab = (url: string): void => {
 }
 
 var loadInNewTab = (url: string): void => {
-    //TODO: implement loadInNewTab
+    chrome.tabs.create(
+        {
+            'url': url,
+        }
+    );
     console.log('Opened ' + url + ' in a new tab.');
 }
