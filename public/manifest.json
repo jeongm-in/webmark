@@ -4,7 +4,8 @@
   "description": "Load a random page from your bookmarks!",
   "permissions": [
     "bookmarks",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "commands": {
     "save": {

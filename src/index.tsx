@@ -8,8 +8,8 @@ import Popup from './components/Popup';
 // // unregister() to register() below. Note this comes with some pitfalls.
 // // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
-/*global chrome*/ ;
-chrome.storage.sync.clear();
+/*global chrome*/;
+// chrome.storage.sync.clear();
 ReactDOM.render(
     <Popup />,
     document.getElementById('root') as HTMLElement
@@ -25,8 +25,7 @@ var saveClicked = (): void => {
             }
             else {
                 console.log('webmarkFolderId found.');
-                let currentUrl: string = getCurrentUrl();
-                saveToWebmarkFolder(currentUrl);
+                getCurrentUrlAndSave();
             };
         }
     );
@@ -73,11 +72,28 @@ var createWebmarkFolder = (): void => {
     )
 };
 
-var getCurrentUrl = (): string => {
-    return 'https://current.url.com';
-};
+let getCurrentUrlAndSave = () => {
+    chrome.tabs.query(
+        { active: true, currentWindow: true },
+        ([currentTab]) => {
+            const thisTabUrl: string|undefined = currentTab.url;
 
-var saveToWebmarkFolder = (url: string): void => {
+            const thisTabTitle: string|undefined = currentTab.title;
+
+            saveToWebmarkFolder(thisTabUrl, thisTabTitle);
+        });
+}
+
+var saveToWebmarkFolder = (url: string|undefined, title: string|undefined): void => {
+
+    //TODO: find better way to sanitize input 
+    if (url == undefined) {
+        url= "https://example.com/error";
+    } 
+    if (title == undefined) {
+        title = "read later";
+    }
+
     chrome.storage.sync.get(
         ['webmarkFolderId'],
         function (result?) {
@@ -96,6 +112,7 @@ var saveToWebmarkFolder = (url: string): void => {
                                 {
                                     'parentId': webmarkFolderId,
                                     'url': url,
+                                    'title': title,
                                 }
                             );
                             console.log(url + ' saved to folder.');
@@ -115,7 +132,7 @@ var loadHere = (): boolean => {
 }
 
 var getRandomUrlFromFolder = (): string => {
-    return 'https://random.url.com/';
+    return 'https://example.com/random';
 }
 
 var showNotice = (message: string): void => {
