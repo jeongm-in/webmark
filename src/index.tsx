@@ -8,7 +8,7 @@ import Popup from './components/Popup';
 // // unregister() to register() below. Note this comes with some pitfalls.
 // // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
-/*global chrome*/;
+/*global chrome*/
 // chrome.storage.sync.clear();
 ReactDOM.render(
     <Popup />,
@@ -76,20 +76,18 @@ let getCurrentUrlAndSave = () => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            const thisTabUrl: string|undefined = currentTab.url;
-
-            const thisTabTitle: string|undefined = currentTab.title;
-
+            const thisTabUrl: string | undefined = currentTab.url;
+            const thisTabTitle: string | undefined = currentTab.title;
             saveToWebmarkFolder(thisTabUrl, thisTabTitle);
-        });
+        }
+    );
 }
 
-var saveToWebmarkFolder = (url: string|undefined, title: string|undefined): void => {
-
+var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): void => {
     //TODO: find better way to sanitize input 
     if (url == undefined) {
-        url= "https://example.com/error";
-    } 
+        url = "https://example.com/error";
+    }
     if (title == undefined) {
         title = "read later";
     }
@@ -128,20 +126,25 @@ var saveToWebmarkFolder = (url: string|undefined, title: string|undefined): void
 }
 
 var loadHere = (): boolean => {
+    //TODO: implement loadHere
     return true;
 }
 
 var getRandomUrlFromFolder = (): string => {
+    //TODO: implement getRandomUrlFromFolder
     return 'https://example.com/random';
 }
 
 var showNotice = (message: string): void => {
+    //TODO: implement showNotice
     console.log('Showed message ("' + message + '") to user.');
 }
 var loadInCurrentTab = (url: string): void => {
+    //TODO: implement loadInCurrentTab
     console.log('Opened ' + url + ' in the current tab.');
 }
 
 var loadInNewTab = (url: string): void => {
+    //TODO: implement loadInNewTab
     console.log('Opened ' + url + ' in a new tab.');
 }
