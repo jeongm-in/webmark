@@ -72,26 +72,17 @@ var createWebmarkFolder = (): void => {
     )
 };
 
-// type checker for proper string type url
-let typeCheckString = (text: string | undefined): string => {
-    if (text == undefined) {
-        // TODO: this block needs proper type guard rather than returning below url.
-        return "https://example.com/error";
-    } else {
-        return text;
-    }
-};
-
 let getCurrentUrlAndSave = () => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
             const thisTabUrl: string|undefined = currentTab.url;
+
             const thisTabTitle: string|undefined = currentTab.title;
+
             saveToWebmarkFolder(thisTabUrl, thisTabTitle);
         });
 }
-
 
 var saveToWebmarkFolder = (url: string|undefined, title: string|undefined): void => {
 
@@ -102,7 +93,6 @@ var saveToWebmarkFolder = (url: string|undefined, title: string|undefined): void
     if (title == undefined) {
         title = "read later";
     }
-
 
     chrome.storage.sync.get(
         ['webmarkFolderId'],
