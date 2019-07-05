@@ -10,6 +10,8 @@ import Popup from './components/Popup';
 // serviceWorker.unregister();
 /*global chrome*/
 // chrome.storage.sync.clear();
+// chrome.storage.sync.set({'loadHere':true});
+
 ReactDOM.render(
     <Popup />,
     document.getElementById('root') as HTMLElement
@@ -52,18 +54,7 @@ var loadClicked = (): void => {
                         return;
                     }
                     console.log('webmark folder found.');
-                    let url: string = getRandomUrlFromFolder();
-                    chrome.storage.sync.get(
-                        ['loadHere'],
-                        function (result) {
-                            if (Object.keys(result).length != 0 && result!['loadHere']) {
-                                loadInCurrentTab(url);
-                            }
-                            else {
-                                loadInNewTab(url);
-                            }
-                        }
-                    );
+                    loadRandomUrlFromFolder();
                 }
             );
         }
@@ -157,15 +148,68 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
     );
 }
 
-var getRandomUrlFromFolder = (): string => {
-    //TODO: implement getRandomUrlFromFolder
-    return 'https://example.com/random';
+let loadRandomUrlFromFolder = (): void => {
+    chrome.storage.sync.get(
+        ['webmarkFolderId'],
+        (result?) => {
+            if (Object.keys(result).length === 0) {
+                console.log('webmarkFolderId not found.');
+                return;
+            }
+            let webmarkFolderId: string = result!['webmarkFolderId'];
+            chrome.bookmarks.get(
+                webmarkFolderId,
+                () => {
+                    if (chrome.runtime.lastError) {
+                        console.log('webmark folder not found.');
+                        showNotice("Invalid Access");
+                        return;
+                    }
+                    let webmarkFolderId: string = result!['webmarkFolderId'];
+                    chrome.bookmarks.getSubTree(
+                        webmarkFolderId,
+                        (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
+                            let urlList: Array<string> = [];
+                            for (let node of bookmarkTreeNodes) {
+                                recursiveUrlCollection(node, urlList);
+                            }
+                            let randomIndex: number = Math.floor(Math.random() * urlList.length);
+                            let randomUrl: string = urlList[randomIndex];
+                            chrome.storage.sync.get(
+                                ['loadHere'],
+                                (result) => {
+                                    if (Object.keys(result).length !== 0 && result!['loadHere']) {
+                                        loadInCurrentTab(randomUrl);
+                                    }
+                                    else {
+                                        loadInNewTab(randomUrl);
+                                    }
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+        }
+    );
+}
+
+let recursiveUrlCollection = (bookmark: chrome.bookmarks.BookmarkTreeNode, urlList: Array<string>) => {
+    if (bookmark.children) {
+        for (let child of bookmark.children) {
+            recursiveUrlCollection(child, urlList);
+        }
+    }
+    if (bookmark.url) {
+        urlList.push(bookmark.url);
+    }
 }
 
 var showNotice = (message: string): void => {
     //TODO: implement showNotice
     console.log('Showed message ("' + message + '") to user.');
 }
+
 var loadInCurrentTab = (url: string): void => {
     chrome.tabs.update(
         {
