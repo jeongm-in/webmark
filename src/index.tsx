@@ -54,7 +54,7 @@ var loadClicked = (): void => {
                         return;
                     }
                     console.log('webmark folder found.');
-                    getRandomUrlFromFolder();
+                    loadRandomUrlFromFolder();
                 }
             );
         }
@@ -148,7 +148,7 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
     );
 }
 
-let getRandomUrlFromFolder = (): void => {
+let loadRandomUrlFromFolder = (): void => {
     chrome.storage.sync.get(
         ['webmarkFolderId'],
         (result?) => {
