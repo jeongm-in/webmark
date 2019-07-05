@@ -4,6 +4,7 @@
   "description": "Load a random page from your bookmarks!",
   "permissions": [
     "bookmarks",
+    "notifications",
     "storage",
     "tabs"
   ],

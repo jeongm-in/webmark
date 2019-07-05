@@ -12,6 +12,12 @@ import Popup from './components/Popup';
 // chrome.storage.sync.clear();
 // chrome.storage.sync.set({'loadHere':true});
 
+enum NotificationId {
+    FolderCreated = 'Folder Created',
+    PageAlreadyExists = 'Page Already Exists',
+    FolderNotFound = 'Folder Not Found',
+};
+
 ReactDOM.render(
     <Popup />,
     document.getElementById('root') as HTMLElement
@@ -79,7 +85,11 @@ var createWebmarkFolder = (): void => {
                 }
             );
             console.log('set webmarkFolderId to ' + newFolder.id);
-            showNotice('No WebMark folder found, so we just created one. :)');
+            showNotice(
+                NotificationId.FolderCreated,
+                'No WebMark folder found, so we just created one. :)'
+                ,
+            );
         },
     )
 };
@@ -138,7 +148,10 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
                                 console.log(url + ' saved to folder.');
                                 return;
                             }
-                            showNotice('The page is already in the folder.');
+                            showNotice(
+                                NotificationId.PageAlreadyExists,
+                                'The page is already in the folder.'
+                            );
                         }
                     )
 
@@ -162,7 +175,10 @@ let loadRandomUrlFromFolder = (): void => {
                 () => {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
-                        showNotice("Invalid Access");
+                        showNotice(
+                            NotificationId.FolderNotFound,
+                            "Invalid Access"
+                        );
                         return;
                     }
                     let webmarkFolderId: string = result!['webmarkFolderId'];
@@ -205,8 +221,20 @@ let recursiveUrlCollection = (bookmark: chrome.bookmarks.BookmarkTreeNode, urlLi
     }
 }
 
-var showNotice = (message: string): void => {
-    //TODO: implement showNotice
+var showNotice = (notificationId: NotificationId, title: string, message: string = ''): void => {
+    chrome.notifications.create(
+        notificationId, // prevents duplicate notifcations (only keeps the most recent one)
+        {
+            'type': 'basic', // required
+            'iconUrl': 'images/default.png', // required
+            'title': title, // required
+            'message': message, // required
+            'eventTime': Date.now(),
+        },
+        function (notificationId: string) {
+            console.log(notificationId + ' notification sent.');
+        }
+    );
     console.log('Showed message ("' + message + '") to user.');
 }
 
