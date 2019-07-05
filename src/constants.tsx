@@ -3,15 +3,15 @@
 export const FOLDER_ID_KEY: string = 'webmarkFolderId';
 export const LOAD_HERE_KEY: string = 'loadHere';
 export enum NotificationId {
-    FolderCreated = 'Folder Created',
     PageAlreadyExists = 'Page Already Exists',
-    FolderNotFound = 'Folder Not Found',
+    FolderEmpty = 'Folder Empty',
+    SaveSuccessful = 'Save Successful',
 };
 
 // to be used for i18n later (user-visible strings)
+export const FOLDER_EMPTY: string = 'The folder is empty. Save some pages!';
 export const FOLDER_NAME: string = 'WebMark';
-export const FOLDER_NOT_FOUND: string = 'No WebMark folder found, so we just created one. :)';
 export const LOAD_BUTTON_TEXT: string = 'Load a random web page';
 export const PAGE_ALREADY_EXISTS: string = 'The page is already in the folder.';
 export const SAVE_BUTTON_TEXT: string = 'Save this web page';
-// export const SAVE_SUCCESSFUL: string = 'Page saved successfully.';
+export const SAVE_SUCCESSFUL: string = 'Page was saved successfully.';

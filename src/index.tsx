@@ -54,6 +54,10 @@ var loadClicked = (): void => {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
                 createWebmarkFolder();
+                showNotice(
+                    constants.NotificationId.FolderEmpty,
+                    constants.FOLDER_EMPTY,
+                );
                 return;
             }
             console.log('webmarkFolderId found.');
@@ -64,6 +68,10 @@ var loadClicked = (): void => {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
                         createWebmarkFolder();
+                        showNotice(
+                            constants.NotificationId.FolderEmpty,
+                            constants.FOLDER_EMPTY,
+                        );
                         chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
                         return;
                     }
@@ -92,10 +100,6 @@ var createWebmarkFolder = (callback?: () => void): void => {
                     [constants.FOLDER_ID_KEY]: newFolder.id,
                 }, function () {
                     console.log('set webmarkFolderId to ' + newFolder.id);
-                    showNotice(
-                        constants.NotificationId.FolderCreated,
-                        constants.FOLDER_NOT_FOUND,
-                    );
                     if (callback !== undefined) {
                         callback();
                     }
@@ -154,6 +158,12 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
                                         'parentId': webmarkFolderId,
                                         'url': url,
                                         'title': title,
+                                    },
+                                    () => {
+                                        showNotice(
+                                            constants.NotificationId.SaveSuccessful,
+                                            constants.SAVE_SUCCESSFUL,
+                                        );
                                     }
                                 );
                                 console.log(url + ' saved to folder.');
@@ -161,7 +171,7 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
                             }
                             showNotice(
                                 constants.NotificationId.PageAlreadyExists,
-                                constants.PAGE_ALREADY_EXISTS
+                                constants.PAGE_ALREADY_EXISTS,
                             );
                         }
                     )
@@ -185,10 +195,6 @@ let loadRandomUrlFromFolder = (): void => {
                 () => {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
-                        showNotice(
-                            constants.NotificationId.FolderNotFound,
-                            "Invalid Access"
-                        );
                         return;
                     }
                     let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
