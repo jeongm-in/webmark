@@ -154,30 +154,38 @@ let loadRandomUrlFromFolder = (): void => {
         (result?) => {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
-                showNotice("Invalid Access");
                 return;
             }
-
-            console.log('webmarkFolderId found.');
             let webmarkFolderId: string = result!['webmarkFolderId'];
-            chrome.bookmarks.getSubTree(
+            chrome.bookmarks.get(
                 webmarkFolderId,
-                (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
-                    let urlList: Array<string> = [];
-                    for (let node of bookmarkTreeNodes) {
-                        recursiveUrlCollection(node, urlList);
+                () => {
+                    if (chrome.runtime.lastError) {
+                        console.log('webmark folder not found.');
+                        showNotice("Invalid Access");
+                        return;
                     }
-                    let randomIndex: number = Math.floor(Math.random() * urlList.length);
-                    let randomUrl: string = urlList[randomIndex];
-                    chrome.storage.sync.get(
-                        ['loadHere'],
-                        (result) => {
-                            if (Object.keys(result).length !== 0 && result!['loadHere']) {
-                                loadInCurrentTab(randomUrl);
+                    let webmarkFolderId: string = result!['webmarkFolderId'];
+                    chrome.bookmarks.getSubTree(
+                        webmarkFolderId,
+                        (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
+                            let urlList: Array<string> = [];
+                            for (let node of bookmarkTreeNodes) {
+                                recursiveUrlCollection(node, urlList);
                             }
-                            else {
-                                loadInNewTab(randomUrl);
-                            }
+                            let randomIndex: number = Math.floor(Math.random() * urlList.length);
+                            let randomUrl: string = urlList[randomIndex];
+                            chrome.storage.sync.get(
+                                ['loadHere'],
+                                (result) => {
+                                    if (Object.keys(result).length !== 0 && result!['loadHere']) {
+                                        loadInCurrentTab(randomUrl);
+                                    }
+                                    else {
+                                        loadInNewTab(randomUrl);
+                                    }
+                                }
+                            );
                         }
                     );
                 }
