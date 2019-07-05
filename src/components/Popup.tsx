@@ -1,5 +1,6 @@
 import * as React from "react";
 import PopupButton from "./PopupButton";
+import * as constants from "../constants"
 
 class Popup extends React.Component {
     constructor() {
@@ -11,8 +12,8 @@ class Popup extends React.Component {
     render() {
         return (
             <div className="popup" style={this.popupStyle}>
-                <PopupButton id="save" text="Save this web page" />
-                <PopupButton id="load" text="Load a random web page" />
+                <PopupButton id="save" text={constants.SAVE_BUTTON_TEXT} />
+                <PopupButton id="load" text={constants.LOAD_BUTTON_TEXT} />
             </div>
         );
     }

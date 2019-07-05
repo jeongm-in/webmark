@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Popup from './components/Popup';
+import * as constants from './constants';
 // import './index.css';
 // import * as serviceWorker from './serviceWorker';
 
@@ -10,13 +11,7 @@ import Popup from './components/Popup';
 // serviceWorker.unregister();
 /*global chrome*/
 // chrome.storage.sync.clear();
-// chrome.storage.sync.set({'loadHere':true});
-
-enum NotificationId {
-    FolderCreated = 'Folder Created',
-    PageAlreadyExists = 'Page Already Exists',
-    FolderNotFound = 'Folder Not Found',
-};
+// chrome.storage.sync.set({ [constants.LOAD_HERE_KEY]: true });
 
 ReactDOM.render(
     <Popup />,
@@ -25,7 +20,7 @@ ReactDOM.render(
 
 var saveClicked = (): void => {
     chrome.storage.sync.get(
-        ['webmarkFolderId'],
+        [constants.FOLDER_ID_KEY],
         function (result) {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
@@ -33,14 +28,14 @@ var saveClicked = (): void => {
             }
             else {
                 console.log('webmarkFolderId found.');
-                let webmarkFolderId: string = result!['webmarkFolderId'];
+                let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
                 chrome.bookmarks.get(
                     webmarkFolderId,
                     function () {
                         if (chrome.runtime.lastError) {
                             console.log('webmark folder not found.');
                             createWebmarkFolder(saveClicked);
-                            chrome.storage.sync.remove('webmarkFolderId');
+                            chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
                             return;
                         }
                         console.log('webmark folder found.');
@@ -54,7 +49,7 @@ var saveClicked = (): void => {
 
 var loadClicked = (): void => {
     chrome.storage.sync.get(
-        ['webmarkFolderId'],
+        [constants.FOLDER_ID_KEY],
         function (result) {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
@@ -62,14 +57,14 @@ var loadClicked = (): void => {
                 return;
             }
             console.log('webmarkFolderId found.');
-            let webmarkFolderId: string = result!['webmarkFolderId'];
+            let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
             chrome.bookmarks.get(
                 webmarkFolderId,
                 function () {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
                         createWebmarkFolder();
-                        chrome.storage.sync.remove('webmarkFolderId');
+                        chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
                         return;
                     }
                     console.log('webmark folder found.');
@@ -89,17 +84,17 @@ loadButton.addEventListener('click', loadClicked);
 var createWebmarkFolder = (callback?: () => void): void => {
     chrome.bookmarks.create(
         {
-            'title': 'WebMark',
+            'title': constants.FOLDER_NAME,
         },
         function (newFolder) {
             chrome.storage.sync.set(
                 {
-                    'webmarkFolderId': newFolder.id,
+                    [constants.FOLDER_ID_KEY]: newFolder.id,
                 }, function () {
                     console.log('set webmarkFolderId to ' + newFolder.id);
                     showNotice(
-                        NotificationId.FolderCreated,
-                        'No WebMark folder found, so we just created one. :)',
+                        constants.NotificationId.FolderCreated,
+                        constants.FOLDER_NOT_FOUND,
                     );
                     if (callback !== undefined) {
                         callback();
@@ -131,7 +126,7 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
     }
 
     chrome.storage.sync.get(
-        ['webmarkFolderId'],
+        [constants.FOLDER_ID_KEY],
         function (result?) {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
@@ -139,14 +134,14 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
                 return;
             }
             console.log('webmarkFolderId found.');
-            let webmarkFolderId: string = result!['webmarkFolderId'];
+            let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
             chrome.bookmarks.get(
                 webmarkFolderId,
                 function () {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
                         createWebmarkFolder();
-                        chrome.storage.sync.remove('webmarkFolderId');
+                        chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
                         return;
                     }
                     chrome.bookmarks.search(
@@ -165,12 +160,11 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
                                 return;
                             }
                             showNotice(
-                                NotificationId.PageAlreadyExists,
-                                'The page is already in the folder.'
+                                constants.NotificationId.PageAlreadyExists,
+                                constants.PAGE_ALREADY_EXISTS
                             );
                         }
                     )
-
                 }
             );
         }
@@ -179,25 +173,25 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
 
 let loadRandomUrlFromFolder = (): void => {
     chrome.storage.sync.get(
-        ['webmarkFolderId'],
+        [constants.FOLDER_ID_KEY],
         (result?) => {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
                 return;
             }
-            let webmarkFolderId: string = result!['webmarkFolderId'];
+            let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
             chrome.bookmarks.get(
                 webmarkFolderId,
                 () => {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
                         showNotice(
-                            NotificationId.FolderNotFound,
+                            constants.NotificationId.FolderNotFound,
                             "Invalid Access"
                         );
                         return;
                     }
-                    let webmarkFolderId: string = result!['webmarkFolderId'];
+                    let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
                     chrome.bookmarks.getSubTree(
                         webmarkFolderId,
                         (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
@@ -208,9 +202,9 @@ let loadRandomUrlFromFolder = (): void => {
                             let randomIndex: number = Math.floor(Math.random() * urlList.length);
                             let randomUrl: string = urlList[randomIndex];
                             chrome.storage.sync.get(
-                                ['loadHere'],
+                                [constants.LOAD_HERE_KEY],
                                 (result) => {
-                                    if (Object.keys(result).length !== 0 && result!['loadHere']) {
+                                    if (Object.keys(result).length !== 0 && result![constants.LOAD_HERE_KEY]) {
                                         loadInCurrentTab(randomUrl);
                                     }
                                     else {
@@ -237,7 +231,7 @@ let recursiveUrlCollection = (bookmark: chrome.bookmarks.BookmarkTreeNode, urlLi
     }
 }
 
-var showNotice = (notificationId: NotificationId, title: string, message: string = ''): void => {
+var showNotice = (notificationId: constants.NotificationId, title: string, message: string = ''): void => {
     chrome.notifications.create(
         notificationId, // prevents duplicate notifcations (only keeps the most recent one)
         {
