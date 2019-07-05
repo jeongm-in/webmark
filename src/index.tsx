@@ -151,27 +151,28 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
 let getRandomUrlFromFolder = (): void => {
     chrome.storage.sync.get(
         ['webmarkFolderId'],
-        (result?) =>{
+        (result?) => {
+            if (Object.keys(result).length === 0) {
+                console.log('webmarkFolderId not found.');
+                showNotice("Invalid Access");
+                return;
+            }
+
             console.log('webmarkFolderId found.');
             let webmarkFolderId: string = result!['webmarkFolderId'];
             chrome.bookmarks.getSubTree(
                 webmarkFolderId,
-                (bookmarkTreeNodes) =>{
-                    let urlList : Array<string> = [];
+                (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
+                    let urlList: Array<string> = [];
                     for (let node of bookmarkTreeNodes) {
-                        if(node.children != undefined){
-                            for(let child of node.children){
-                                if(child.url!=undefined){
-                                    urlList.push(child.url);
-                                }
-                            }
-                        }
+                        recursiveUrlCollection(node, urlList);
                     }
-                    let randomUrl : string= urlList[Math.floor(Math.random() * urlList.length)];
+                    let randomIndex: number = Math.floor(Math.random() * urlList.length);
+                    let randomUrl: string = urlList[randomIndex];
                     chrome.storage.sync.get(
                         ['loadHere'],
-                        function (result) {
-                            if (Object.keys(result).length != 0 && result!['loadHere']) {
+                        (result) => {
+                            if (Object.keys(result).length !== 0 && result!['loadHere']) {
                                 loadInCurrentTab(randomUrl);
                             }
                             else {
@@ -183,13 +184,24 @@ let getRandomUrlFromFolder = (): void => {
             );
         }
     );
-    
+}
+
+let recursiveUrlCollection = (bookmark: chrome.bookmarks.BookmarkTreeNode, urlList: Array<string>) => {
+    if (bookmark.children) {
+        for (let child of bookmark.children) {
+            recursiveUrlCollection(child, urlList);
+        }
+    }
+    if (bookmark.url) {
+        urlList.push(bookmark.url);
+    }
 }
 
 var showNotice = (message: string): void => {
     //TODO: implement showNotice
     console.log('Showed message ("' + message + '") to user.');
 }
+
 var loadInCurrentTab = (url: string): void => {
     chrome.tabs.update(
         {
