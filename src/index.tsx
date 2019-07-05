@@ -10,6 +10,8 @@ import Popup from './components/Popup';
 // serviceWorker.unregister();
 /*global chrome*/
 // chrome.storage.sync.clear();
+// chrome.storage.sync.set({'loadHere':true});
+
 ReactDOM.render(
     <Popup />,
     document.getElementById('root') as HTMLElement
@@ -52,18 +54,7 @@ var loadClicked = (): void => {
                         return;
                     }
                     console.log('webmark folder found.');
-                    let url: string = getRandomUrlFromFolder();
-                    chrome.storage.sync.get(
-                        ['loadHere'],
-                        function (result) {
-                            if (Object.keys(result).length != 0 && result!['loadHere']) {
-                                loadInCurrentTab(url);
-                            }
-                            else {
-                                loadInNewTab(url);
-                            }
-                        }
-                    );
+                    getRandomUrlFromFolder();
                 }
             );
         }
@@ -157,9 +148,42 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
     );
 }
 
-var getRandomUrlFromFolder = (): string => {
-    //TODO: implement getRandomUrlFromFolder
-    return 'https://example.com/random';
+let getRandomUrlFromFolder = (): void => {
+    chrome.storage.sync.get(
+        ['webmarkFolderId'],
+        (result?) =>{
+            console.log('webmarkFolderId found.');
+            let webmarkFolderId: string = result!['webmarkFolderId'];
+            chrome.bookmarks.getSubTree(
+                webmarkFolderId,
+                (bookmarkTreeNodes) =>{
+                    let urlList : Array<string> = [];
+                    for (let node of bookmarkTreeNodes) {
+                        if(node.children != undefined){
+                            for(let child of node.children){
+                                if(child.url!=undefined){
+                                    urlList.push(child.url);
+                                }
+                            }
+                        }
+                    }
+                    let randomUrl : string= urlList[Math.floor(Math.random() * urlList.length)];
+                    chrome.storage.sync.get(
+                        ['loadHere'],
+                        function (result) {
+                            if (Object.keys(result).length != 0 && result!['loadHere']) {
+                                loadInCurrentTab(randomUrl);
+                            }
+                            else {
+                                loadInNewTab(randomUrl);
+                            }
+                        }
+                    );
+                }
+            );
+        }
+    );
+    
 }
 
 var showNotice = (message: string): void => {
