@@ -29,11 +29,24 @@ var saveClicked = (): void => {
         function (result) {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
-                createWebmarkFolder();
+                createWebmarkFolder(saveClicked);
             }
             else {
                 console.log('webmarkFolderId found.');
-                getCurrentUrlAndSave();
+                let webmarkFolderId: string = result!['webmarkFolderId'];
+                chrome.bookmarks.get(
+                    webmarkFolderId,
+                    function () {
+                        if (chrome.runtime.lastError) {
+                            console.log('webmark folder not found.');
+                            createWebmarkFolder(saveClicked);
+                            chrome.storage.sync.remove('webmarkFolderId');
+                            return;
+                        }
+                        console.log('webmark folder found.');
+                        getCurrentUrlAndSave();
+                    }
+                );
             };
         }
     );
@@ -73,7 +86,7 @@ saveButton.addEventListener('click', saveClicked);
 loadButton.addEventListener('click', loadClicked);
 
 // helper functions
-var createWebmarkFolder = (): void => {
+var createWebmarkFolder = (callback?: () => void): void => {
     chrome.bookmarks.create(
         {
             'title': 'WebMark',
@@ -82,13 +95,16 @@ var createWebmarkFolder = (): void => {
             chrome.storage.sync.set(
                 {
                     'webmarkFolderId': newFolder.id,
+                }, function () {
+                    console.log('set webmarkFolderId to ' + newFolder.id);
+                    showNotice(
+                        NotificationId.FolderCreated,
+                        'No WebMark folder found, so we just created one. :)',
+                    );
+                    if (callback !== undefined) {
+                        callback();
+                    }
                 }
-            );
-            console.log('set webmarkFolderId to ' + newFolder.id);
-            showNotice(
-                NotificationId.FolderCreated,
-                'No WebMark folder found, so we just created one. :)'
-                ,
             );
         },
     )
