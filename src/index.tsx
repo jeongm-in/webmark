@@ -39,7 +39,7 @@ var saveClicked = (): void => {
                             return;
                         }
                         console.log('webmark folder found.');
-                        getCurrentUrlAndSave();
+                        getCurrentUrlAndSave(webmarkFolderId);
                     }
                 );
             };
@@ -76,7 +76,7 @@ var loadClicked = (): void => {
                         return;
                     }
                     console.log('webmark folder found.');
-                    loadRandomUrlFromFolder();
+                    loadRandomUrlFromFolder(webmarkFolderId);
                 }
             );
         }
@@ -109,49 +109,14 @@ var createWebmarkFolder = (callback?: () => void): void => {
     )
 };
 
-let getCurrentUrlAndSave = () => {
+let getCurrentUrlAndSave = (webmarkFolderId: string) => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            const thisTabUrl: string | undefined = currentTab.url;
-            const thisTabTitle: string | undefined = currentTab.title;
-            saveToWebmarkFolder(thisTabUrl, thisTabTitle);
-        }
-    );
-}
-
-var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): void => {
-    //TODO: find better way to sanitize input 
-    if (url == undefined) {
-        url = "https://example.com/error";
-    }
-    if (title == undefined) {
-        title = "read later";
-    }
-
-    chrome.storage.sync.get(
-        [constants.FOLDER_ID_KEY],
-        function (result?) {
-            if (Object.keys(result).length === 0) {
-                console.log('webmarkFolderId not found.');
-                createWebmarkFolder();
-                return;
-            }
-            console.log('webmarkFolderId found.');
-            let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
-            chrome.bookmarks.get(
-                webmarkFolderId,
-                function () {
-                    if (chrome.runtime.lastError) {
-                        console.log('webmark folder not found.');
-                        createWebmarkFolder();
-                        chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
-                    }
-                    else {
-                        saveIfNotAlreadyThere(webmarkFolderId, url!, title!);
-                    }
-                }
-            );
+            //TODO: find better way to sanitize input 
+            const thisTabUrl: string = (currentTab.url === undefined) ? "https://example.com/error" : currentTab.url;
+            const thisTabTitle: string = (currentTab.title === undefined) ? "read later" : currentTab.title;
+            saveIfNotAlreadyThere(webmarkFolderId, thisTabUrl, thisTabTitle);
         }
     );
 }
@@ -206,44 +171,24 @@ let saveWithConfidence = (webmarkFolderId: string, url: string, title: string): 
     );
 }
 
-let loadRandomUrlFromFolder = (): void => {
-    chrome.storage.sync.get(
-        [constants.FOLDER_ID_KEY],
-        (result?) => {
-            if (Object.keys(result).length === 0) {
-                console.log('webmarkFolderId not found.');
+let loadRandomUrlFromFolder = (webmarkFolderId: string): void => {
+    chrome.bookmarks.getSubTree(
+        webmarkFolderId,
+        (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
+            let urlList: Array<string> = [];
+            for (let node of bookmarkTreeNodes) {
+                recursiveUrlCollection(node, urlList);
+            }
+            if (urlList.length == 0) {
+                showNotice(
+                    constants.NotificationId.FolderEmpty,
+                    constants.FOLDER_EMPTY,
+                );
                 return;
             }
-            let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
-            chrome.bookmarks.get(
-                webmarkFolderId,
-                () => {
-                    if (chrome.runtime.lastError) {
-                        console.log('webmark folder not found.');
-                        return;
-                    }
-                    let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
-                    chrome.bookmarks.getSubTree(
-                        webmarkFolderId,
-                        (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
-                            let urlList: Array<string> = [];
-                            for (let node of bookmarkTreeNodes) {
-                                recursiveUrlCollection(node, urlList);
-                            }
-                            if (urlList.length == 0) {
-                                showNotice(
-                                    constants.NotificationId.FolderEmpty,
-                                    constants.FOLDER_EMPTY,
-                                );
-                                return;
-                            }
-                            let randomIndex: number = Math.floor(Math.random() * urlList.length);
-                            let randomUrl: string = urlList[randomIndex];
-                            loadPage(randomUrl);
-                        }
-                    );
-                }
-            );
+            let randomIndex: number = Math.floor(Math.random() * urlList.length);
+            let randomUrl: string = urlList[randomIndex];
+            loadPage(randomUrl);
         }
     );
 }
