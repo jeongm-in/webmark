@@ -230,6 +230,13 @@ let loadRandomUrlFromFolder = (): void => {
                             for (let node of bookmarkTreeNodes) {
                                 recursiveUrlCollection(node, urlList);
                             }
+                            if (urlList.length == 0) {
+                                showNotice(
+                                    constants.NotificationId.FolderEmpty,
+                                    constants.FOLDER_EMPTY,
+                                );
+                                return;
+                            }
                             let randomIndex: number = Math.floor(Math.random() * urlList.length);
                             let randomUrl: string = urlList[randomIndex];
                             chrome.storage.sync.get(
