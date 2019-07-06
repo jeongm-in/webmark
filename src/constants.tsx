@@ -3,11 +3,6 @@
 // IDs and keys (user-invisible strings)
 export const FOLDER_ID_KEY: string = 'webmarkFolderId';
 export const LOAD_HERE_KEY: string = 'loadHere';
-export enum NotificationId {
-    PageAlreadyExists = 'Page Already Exists',
-    FolderEmpty = 'Folder Empty',
-    SaveSuccessful = 'Save Successful',
-};
 
 // user-visible strings
 export const FOLDER_EMPTY: string = chrome.i18n.getMessage('folderEmpty');

@@ -54,10 +54,7 @@ var loadClicked = (): void => {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
                 createWebmarkFolder();
-                showNotice(
-                    constants.NotificationId.FolderEmpty,
-                    constants.FOLDER_EMPTY,
-                );
+                showNotice(constants.FOLDER_EMPTY);
                 return;
             }
             console.log('webmarkFolderId found.');
@@ -68,10 +65,7 @@ var loadClicked = (): void => {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
                         createWebmarkFolder();
-                        showNotice(
-                            constants.NotificationId.FolderEmpty,
-                            constants.FOLDER_EMPTY,
-                        );
+                        showNotice(constants.FOLDER_EMPTY);
                         chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
                         return;
                     }
@@ -142,10 +136,7 @@ let saveIfNotAlreadyThere = (webmarkFolderId: string, url: string, title: string
         webmarkFolderId,
         (results: chrome.bookmarks.BookmarkTreeNode[]): void => {
             if (isInTree(url, results)) {
-                showNotice(
-                    constants.NotificationId.PageAlreadyExists,
-                    constants.PAGE_ALREADY_EXISTS,
-                );
+                showNotice(constants.PAGE_ALREADY_EXISTS);
             }
             else {
                 console.log('Same page not found in the folder.');
@@ -163,10 +154,7 @@ let saveWithConfidence = (webmarkFolderId: string, url: string, title: string): 
             'title': title,
         },
         () => {
-            showNotice(
-                constants.NotificationId.SaveSuccessful,
-                constants.SAVE_SUCCESSFUL,
-            );
+            showNotice(constants.SAVE_SUCCESSFUL);
             console.log(url + ' saved to folder.');
         }
     );
@@ -181,10 +169,7 @@ let loadRandomUrlFromFolder = (webmarkFolderId: string): void => {
                 recursiveUrlCollection(node, urlList);
             }
             if (urlList.length == 0) {
-                showNotice(
-                    constants.NotificationId.FolderEmpty,
-                    constants.FOLDER_EMPTY,
-                );
+                showNotice(constants.FOLDER_EMPTY);
                 return;
             }
             let randomIndex: number = Math.floor(Math.random() * urlList.length);
@@ -219,9 +204,9 @@ let recursiveUrlCollection = (bookmark: chrome.bookmarks.BookmarkTreeNode, urlLi
     }
 }
 
-var showNotice = (notificationId: constants.NotificationId, title: string, message: string = ''): void => {
+var showNotice = (title: string, message: string = ''): void => {
     chrome.notifications.create(
-        notificationId, // prevents duplicate notifcations (only keeps the most recent one)
+        // notificationId intentionally not sent
         {
             'type': 'basic', // required
             'iconUrl': 'images/default.png', // required
@@ -233,7 +218,7 @@ var showNotice = (notificationId: constants.NotificationId, title: string, messa
             console.log(notificationId + ' notification sent.');
         }
     );
-    console.log('Showed message ("' + message + '") to user.');
+    console.log('Showed message ("' + title + '") to user.');
 }
 
 var loadInCurrentTab = (url: string): void => {
