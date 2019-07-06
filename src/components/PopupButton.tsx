@@ -14,12 +14,12 @@ class PopupButton extends React.Component<Props> {
         this.id = props.id;
         this.text = props.text;
     }
+    style = {
+        'white-space': 'nowrap'
+    } as React.CSSProperties;
     render() {
-        return (
-            <div className="popupButton">
-                <Button id={this.id} variant="light" block>{this.text}</Button>
-            </div>
-        );
+        return <Button id={this.id} variant="light" style={this.style}
+            block>{this.text}</Button>;
     }
 }
 
