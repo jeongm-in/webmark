@@ -146,37 +146,62 @@ var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): 
                         console.log('webmark folder not found.');
                         createWebmarkFolder();
                         chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
-                        return;
                     }
-                    chrome.bookmarks.search(
-                        { 'url': url },
-                        function (results) {
-                            if (results == undefined || results.length == 0) {
-                                console.log('Same page not found in the folder.');
-                                chrome.bookmarks.create(
-                                    {
-                                        'parentId': webmarkFolderId,
-                                        'url': url,
-                                        'title': title,
-                                    },
-                                    () => {
-                                        showNotice(
-                                            constants.NotificationId.SaveSuccessful,
-                                            constants.SAVE_SUCCESSFUL,
-                                        );
-                                    }
-                                );
-                                console.log(url + ' saved to folder.');
-                                return;
-                            }
-                            showNotice(
-                                constants.NotificationId.PageAlreadyExists,
-                                constants.PAGE_ALREADY_EXISTS,
-                            );
-                        }
-                    )
+                    else {
+                        saveIfNotAlreadyThere(webmarkFolderId, url!, title!);
+                    }
                 }
             );
+        }
+    );
+}
+
+let isInTree = (url: string, nodes: chrome.bookmarks.BookmarkTreeNode[]): boolean => {
+    let node: chrome.bookmarks.BookmarkTreeNode;
+    while (nodes.length > 0) {
+        node = nodes.pop()!;
+        if (node.url && node.url == url) {
+            return true;
+        } else if (node.children && node.children.length) {
+            for (let child of nodes) {
+                nodes.push(child);
+            }
+        }
+    }
+    return false;
+}
+
+let saveIfNotAlreadyThere = (webmarkFolderId: string, url: string, title: string): void => {
+    chrome.bookmarks.getSubTree(
+        webmarkFolderId,
+        (results: chrome.bookmarks.BookmarkTreeNode[]): void => {
+            if (isInTree(url, results)) {
+                showNotice(
+                    constants.NotificationId.PageAlreadyExists,
+                    constants.PAGE_ALREADY_EXISTS,
+                );
+            }
+            else {
+                console.log('Same page not found in the folder.');
+                saveWithConfidence(webmarkFolderId, url, title);
+            }
+        }
+    );
+}
+
+let saveWithConfidence = (webmarkFolderId: string, url: string, title: string): void => {
+    chrome.bookmarks.create(
+        {
+            'parentId': webmarkFolderId,
+            'url': url,
+            'title': title,
+        },
+        () => {
+            showNotice(
+                constants.NotificationId.SaveSuccessful,
+                constants.SAVE_SUCCESSFUL,
+            );
+            console.log(url + ' saved to folder.');
         }
     );
 }
