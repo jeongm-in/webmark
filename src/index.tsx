@@ -122,13 +122,14 @@ let getCurrentUrlAndSave = (webmarkFolderId: string) => {
 }
 
 let isInTree = (url: string, nodes: chrome.bookmarks.BookmarkTreeNode[]): boolean => {
-    let node: chrome.bookmarks.BookmarkTreeNode;
     while (nodes.length > 0) {
-        node = nodes.pop()!;
-        if (node.url && node.url == url) {
-            return true;
-        } else if (node.children && node.children.length) {
-            for (let child of nodes) {
+        let node: chrome.bookmarks.BookmarkTreeNode = nodes.pop()!;
+        if (node.url) { // bookmark
+            if (node.url == url) {
+                return true;
+            }
+        } else if (node.children) { // folder and has children
+            for (let child of node.children) {
                 nodes.push(child);
             }
         }
