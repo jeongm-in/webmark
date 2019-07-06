@@ -239,21 +239,25 @@ let loadRandomUrlFromFolder = (): void => {
                             }
                             let randomIndex: number = Math.floor(Math.random() * urlList.length);
                             let randomUrl: string = urlList[randomIndex];
-                            chrome.storage.sync.get(
-                                [constants.LOAD_HERE_KEY],
-                                (result) => {
-                                    if (Object.keys(result).length !== 0 && result![constants.LOAD_HERE_KEY]) {
-                                        loadInCurrentTab(randomUrl);
-                                    }
-                                    else {
-                                        loadInNewTab(randomUrl);
-                                    }
-                                }
-                            );
+                            loadPage(randomUrl);
                         }
                     );
                 }
             );
+        }
+    );
+}
+
+let loadPage = (url: string): void => {
+    chrome.storage.sync.get(
+        [constants.LOAD_HERE_KEY],
+        (result) => {
+            if (Object.keys(result).length !== 0 && result![constants.LOAD_HERE_KEY]) {
+                loadInCurrentTab(url);
+            }
+            else {
+                loadInNewTab(url);
+            }
         }
     );
 }
