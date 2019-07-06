@@ -1,7 +1,8 @@
 {
-  "name": "WebMark",
+  "name": "__MSG_extensionName__",
   "version": "0.1.0",
-  "description": "Load a random page from your bookmarks!",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
   "permissions": [
     "bookmarks",
     "notifications",

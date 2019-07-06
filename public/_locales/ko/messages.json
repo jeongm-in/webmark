@@ -1,0 +1,26 @@
+{
+    "extensionDescription": {
+        "message": "저장해 둔 페이지를 무작위로 불러오세요."
+    },
+    "extensionName": {
+        "message": "웹마크"
+    },
+    "folderEmpty": {
+        "message": "페이지를 먼저 저장해 보세요."
+    },
+    "folderName": {
+        "message": "웹마크"
+    },
+    "loadButton": {
+        "message": "불러오기"
+    },
+    "pageAlreadyExists": {
+        "message": "이미 저장된 페이지예요."
+    },
+    "saveButton": {
+        "message": "저장하기"
+    },
+    "saveSuccessful": {
+        "message": "성공적으로 저장했어요."
+    }
+}
