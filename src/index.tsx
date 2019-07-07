@@ -112,12 +112,16 @@ let getCurrentUrlAndSave = (webmarkFolderId: string) => {
             // both currentTab.url and currentTab.title are string|undefined, so I cannot assign it to thisTabUrl and thisTabTitle.
             // Why would changing parameters to optional solve this problem?
             // Wrong 
-            // const thisTabUrl: string = currentTab.url;
-            // const thisTabTitle: string = currentTab.title;
+            // const thisTabUrl: string | undefined = currentTab.url;
+            // const thisTabTitle: string | undefined = currentTab.title;
 
             // Correct
-            const thisTabUrl: string = (currentTab.url === undefined) ? "https://example.com/error" : currentTab.url;
-            const thisTabTitle: string = (currentTab.title === undefined) ? "read later" : currentTab.title;
+            // const thisTabUrl: string = (currentTab.url === undefined) ? "https://example.com/error" : currentTab.url;
+            // const thisTabTitle: string = (currentTab.title === undefined) ? "read later" : currentTab.title;
+
+            // Also correct 
+            const thisTabUrl: string | undefined = currentTab.url;
+            const thisTabTitle: string | undefined = currentTab.title;
 
             saveIfNotAlreadyThere(webmarkFolderId, thisTabUrl, thisTabTitle);
         }
