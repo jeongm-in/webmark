@@ -1,0 +1,26 @@
+{
+    "extensionDescription": {
+        "message": "Load a random page from your bookmarks!"
+    },
+    "extensionName": {
+        "message": "WebMark"
+    },
+    "folderEmpty": {
+        "message": "The folder is empty. Save some pages!"
+    },
+    "folderName": {
+        "message": "WebMark"
+    },
+    "loadButton": {
+        "message": "Load a random web page"
+    },
+    "pageAlreadyExists": {
+        "message": "The page is already in the folder."
+    },
+    "saveButton": {
+        "message": "Save this web page"
+    },
+    "saveSuccessful": {
+        "message": "Page was saved successfully."
+    }
+}

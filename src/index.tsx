@@ -39,7 +39,7 @@ var saveClicked = (): void => {
                             return;
                         }
                         console.log('webmark folder found.');
-                        getCurrentUrlAndSave();
+                        getCurrentUrlAndSave(webmarkFolderId);
                     }
                 );
             };
@@ -54,10 +54,7 @@ var loadClicked = (): void => {
             if (Object.keys(result).length === 0) {
                 console.log('webmarkFolderId not found.');
                 createWebmarkFolder();
-                showNotice(
-                    constants.NotificationId.FolderEmpty,
-                    constants.FOLDER_EMPTY,
-                );
+                showNotice(constants.FOLDER_EMPTY);
                 return;
             }
             console.log('webmarkFolderId found.');
@@ -68,15 +65,12 @@ var loadClicked = (): void => {
                     if (chrome.runtime.lastError) {
                         console.log('webmark folder not found.');
                         createWebmarkFolder();
-                        showNotice(
-                            constants.NotificationId.FolderEmpty,
-                            constants.FOLDER_EMPTY,
-                        );
+                        showNotice(constants.FOLDER_EMPTY);
                         chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
                         return;
                     }
                     console.log('webmark folder found.');
-                    loadRandomUrlFromFolder();
+                    loadRandomUrlFromFolder(webmarkFolderId);
                 }
             );
         }
@@ -109,119 +103,92 @@ var createWebmarkFolder = (callback?: () => void): void => {
     )
 };
 
-let getCurrentUrlAndSave = () => {
+let getCurrentUrlAndSave = (webmarkFolderId: string) => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            const thisTabUrl: string | undefined = currentTab.url;
-            const thisTabTitle: string | undefined = currentTab.title;
-            saveToWebmarkFolder(thisTabUrl, thisTabTitle);
+            //TODO: find better way to sanitize input 
+            const thisTabUrl: string = (currentTab.url === undefined) ? "https://example.com/error" : currentTab.url;
+            const thisTabTitle: string = (currentTab.title === undefined) ? "read later" : currentTab.title;
+            saveIfNotAlreadyThere(webmarkFolderId, thisTabUrl, thisTabTitle);
         }
     );
 }
 
-var saveToWebmarkFolder = (url: string | undefined, title: string | undefined): void => {
-    //TODO: find better way to sanitize input 
-    if (url == undefined) {
-        url = "https://example.com/error";
-    }
-    if (title == undefined) {
-        title = "read later";
-    }
-
-    chrome.storage.sync.get(
-        [constants.FOLDER_ID_KEY],
-        function (result?) {
-            if (Object.keys(result).length === 0) {
-                console.log('webmarkFolderId not found.');
-                createWebmarkFolder();
-                return;
+let isInTree = (url: string, nodes: chrome.bookmarks.BookmarkTreeNode[]): boolean => {
+    while (nodes.length > 0) {
+        let node: chrome.bookmarks.BookmarkTreeNode = nodes.pop()!;
+        if (node.url) { // bookmark
+            if (node.url == url) {
+                return true;
             }
-            console.log('webmarkFolderId found.');
-            let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
-            chrome.bookmarks.get(
-                webmarkFolderId,
-                function () {
-                    if (chrome.runtime.lastError) {
-                        console.log('webmark folder not found.');
-                        createWebmarkFolder();
-                        chrome.storage.sync.remove(constants.FOLDER_ID_KEY);
-                        return;
-                    }
-                    chrome.bookmarks.search(
-                        { 'url': url },
-                        function (results) {
-                            if (results == undefined || results.length == 0) {
-                                console.log('Same page not found in the folder.');
-                                chrome.bookmarks.create(
-                                    {
-                                        'parentId': webmarkFolderId,
-                                        'url': url,
-                                        'title': title,
-                                    },
-                                    () => {
-                                        showNotice(
-                                            constants.NotificationId.SaveSuccessful,
-                                            constants.SAVE_SUCCESSFUL,
-                                        );
-                                    }
-                                );
-                                console.log(url + ' saved to folder.');
-                                return;
-                            }
-                            showNotice(
-                                constants.NotificationId.PageAlreadyExists,
-                                constants.PAGE_ALREADY_EXISTS,
-                            );
-                        }
-                    )
-                }
-            );
+        } else if (node.children) { // folder and has children
+            for (let child of node.children) {
+                nodes.push(child);
+            }
+        }
+    }
+    return false;
+}
+
+let saveIfNotAlreadyThere = (webmarkFolderId: string, url: string, title: string): void => {
+    chrome.bookmarks.getSubTree(
+        webmarkFolderId,
+        (results: chrome.bookmarks.BookmarkTreeNode[]): void => {
+            if (isInTree(url, results)) {
+                showNotice(constants.PAGE_ALREADY_EXISTS);
+            }
+            else {
+                console.log('Same page not found in the folder.');
+                saveWithConfidence(webmarkFolderId, url, title);
+            }
         }
     );
 }
 
-let loadRandomUrlFromFolder = (): void => {
-    chrome.storage.sync.get(
-        [constants.FOLDER_ID_KEY],
-        (result?) => {
-            if (Object.keys(result).length === 0) {
-                console.log('webmarkFolderId not found.');
+let saveWithConfidence = (webmarkFolderId: string, url: string, title: string): void => {
+    chrome.bookmarks.create(
+        {
+            'parentId': webmarkFolderId,
+            'url': url,
+            'title': title,
+        },
+        () => {
+            showNotice(constants.SAVE_SUCCESSFUL);
+            console.log(url + ' saved to folder.');
+        }
+    );
+}
+
+let loadRandomUrlFromFolder = (webmarkFolderId: string): void => {
+    chrome.bookmarks.getSubTree(
+        webmarkFolderId,
+        (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
+            let urlList: Array<string> = [];
+            for (let node of bookmarkTreeNodes) {
+                recursiveUrlCollection(node, urlList);
+            }
+            if (urlList.length == 0) {
+                showNotice(constants.FOLDER_EMPTY);
                 return;
             }
-            let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
-            chrome.bookmarks.get(
-                webmarkFolderId,
-                () => {
-                    if (chrome.runtime.lastError) {
-                        console.log('webmark folder not found.');
-                        return;
-                    }
-                    let webmarkFolderId: string = result![constants.FOLDER_ID_KEY];
-                    chrome.bookmarks.getSubTree(
-                        webmarkFolderId,
-                        (bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[]) => {
-                            let urlList: Array<string> = [];
-                            for (let node of bookmarkTreeNodes) {
-                                recursiveUrlCollection(node, urlList);
-                            }
-                            let randomIndex: number = Math.floor(Math.random() * urlList.length);
-                            let randomUrl: string = urlList[randomIndex];
-                            chrome.storage.sync.get(
-                                [constants.LOAD_HERE_KEY],
-                                (result) => {
-                                    if (Object.keys(result).length !== 0 && result![constants.LOAD_HERE_KEY]) {
-                                        loadInCurrentTab(randomUrl);
-                                    }
-                                    else {
-                                        loadInNewTab(randomUrl);
-                                    }
-                                }
-                            );
-                        }
-                    );
-                }
-            );
+            let randomIndex: number = Math.floor(Math.random() * urlList.length);
+            let randomUrl: string = urlList[randomIndex];
+            loadPage(randomUrl);
+        }
+    );
+}
+
+let loadPage = (url: string): void => {
+    chrome.storage.sync.get(
+        [constants.LOAD_HERE_KEY],
+        (result) => {
+            if (Object.keys(result).length !== 0 && result![constants.LOAD_HERE_KEY]) {
+                loadInCurrentTab(url);
+            }
+            else {
+                loadInNewTab(url);
+            }
         }
     );
 }
@@ -237,9 +204,9 @@ let recursiveUrlCollection = (bookmark: chrome.bookmarks.BookmarkTreeNode, urlLi
     }
 }
 
-var showNotice = (notificationId: constants.NotificationId, title: string, message: string = ''): void => {
+var showNotice = (title: string, message: string = ''): void => {
     chrome.notifications.create(
-        notificationId, // prevents duplicate notifcations (only keeps the most recent one)
+        // notificationId intentionally not sent
         {
             'type': 'basic', // required
             'iconUrl': 'images/default.png', // required
@@ -251,7 +218,7 @@ var showNotice = (notificationId: constants.NotificationId, title: string, messa
             console.log(notificationId + ' notification sent.');
         }
     );
-    console.log('Showed message ("' + message + '") to user.');
+    console.log('Showed message ("' + title + '") to user.');
 }
 
 var loadInCurrentTab = (url: string): void => {
