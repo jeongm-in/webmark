@@ -107,22 +107,8 @@ let getCurrentUrlAndSave = (webmarkFolderId: string) => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            // TODO: find better way to sanitize input 
-            // Making parameters that has type string|undefined to be optional does not solve this issue here.
-            // both currentTab.url and currentTab.title are string|undefined, so I cannot assign it to thisTabUrl and thisTabTitle.
-            // Why would changing parameters to optional solve this problem?
-            // Wrong 
-            // const thisTabUrl: string | undefined = currentTab.url;
-            // const thisTabTitle: string | undefined = currentTab.title;
-
-            // Correct
-            // const thisTabUrl: string = (currentTab.url === undefined) ? "https://example.com/error" : currentTab.url;
-            // const thisTabTitle: string = (currentTab.title === undefined) ? "read later" : currentTab.title;
-
-            // Also correct 
             const thisTabUrl: string | undefined = currentTab.url;
             const thisTabTitle: string | undefined = currentTab.title;
-
             saveIfNotAlreadyThere(webmarkFolderId, thisTabUrl, thisTabTitle);
         }
     );
