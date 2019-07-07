@@ -107,15 +107,24 @@ let getCurrentUrlAndSave = (webmarkFolderId: string) => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            //TODO: find better way to sanitize input 
+            // TODO: find better way to sanitize input 
+            // Making parameters that has type string|undefined to be optional does not solve this issue here.
+            // both currentTab.url and currentTab.title are string|undefined, so I cannot assign it to thisTabUrl and thisTabTitle.
+            // Why would changing parameters to optional solve this problem?
+            // Wrong 
+            // const thisTabUrl: string = currentTab.url;
+            // const thisTabTitle: string = currentTab.title;
+
+            // Correct
             const thisTabUrl: string = (currentTab.url === undefined) ? "https://example.com/error" : currentTab.url;
             const thisTabTitle: string = (currentTab.title === undefined) ? "read later" : currentTab.title;
+
             saveIfNotAlreadyThere(webmarkFolderId, thisTabUrl, thisTabTitle);
         }
     );
 }
 
-let isInTree = (url: string, nodes: chrome.bookmarks.BookmarkTreeNode[]): boolean => {
+let isInTree = (nodes: chrome.bookmarks.BookmarkTreeNode[], url?: string): boolean => {
     while (nodes.length > 0) {
         let node: chrome.bookmarks.BookmarkTreeNode = nodes.pop()!;
         if (node.url) { // bookmark
@@ -131,11 +140,11 @@ let isInTree = (url: string, nodes: chrome.bookmarks.BookmarkTreeNode[]): boolea
     return false;
 }
 
-let saveIfNotAlreadyThere = (webmarkFolderId: string, url: string, title: string): void => {
+let saveIfNotAlreadyThere = (webmarkFolderId: string, url?: string, title?: string): void => {
     chrome.bookmarks.getSubTree(
         webmarkFolderId,
         (results: chrome.bookmarks.BookmarkTreeNode[]): void => {
-            if (isInTree(url, results)) {
+            if (isInTree(results, url)) {
                 showNotice(constants.PAGE_ALREADY_EXISTS);
             }
             else {
@@ -146,7 +155,7 @@ let saveIfNotAlreadyThere = (webmarkFolderId: string, url: string, title: string
     );
 }
 
-let saveWithConfidence = (webmarkFolderId: string, url: string, title: string): void => {
+let saveWithConfidence = (webmarkFolderId: string, url?: string, title?: string): void => {
     chrome.bookmarks.create(
         {
             'parentId': webmarkFolderId,
