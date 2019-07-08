@@ -107,9 +107,8 @@ let getCurrentUrlAndSave = (webmarkFolderId: string) => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            //TODO: find better way to sanitize input 
-            const thisTabUrl: string = (currentTab.url === undefined) ? "https://example.com/error" : currentTab.url;
-            const thisTabTitle: string = (currentTab.title === undefined) ? "read later" : currentTab.title;
+            const thisTabUrl: string = currentTab.url!;
+            const thisTabTitle: string = currentTab.title!;
             saveIfNotAlreadyThere(webmarkFolderId, thisTabUrl, thisTabTitle);
         }
     );
