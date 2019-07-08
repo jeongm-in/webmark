@@ -1,5 +1,5 @@
 import * as constants from './constants'
-import { createWebmarkFolder } from './utils'
+import { createWebmarkFolder, saveClicked, loadClicked } from './utils'
 
 chrome.runtime.onInstalled.addListener(
     () => {
@@ -30,3 +30,15 @@ chrome.runtime.onInstalled.addListener(
         );
     }
 )
+
+chrome.commands.onCommand.addListener(
+    (command: string) => {
+        if (command === 'save') {
+            saveClicked();
+        }
+        else if (command === 'load') {
+            loadClicked();
+        }
+    }
+);
+
