@@ -107,14 +107,14 @@ let getCurrentUrlAndSave = (webmarkFolderId: string) => {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         ([currentTab]) => {
-            const thisTabUrl: string | undefined = currentTab.url;
-            const thisTabTitle: string | undefined = currentTab.title;
+            const thisTabUrl: string = currentTab.url!;
+            const thisTabTitle: string = currentTab.title!;
             saveIfNotAlreadyThere(webmarkFolderId, thisTabUrl, thisTabTitle);
         }
     );
 }
 
-let isInTree = (nodes: chrome.bookmarks.BookmarkTreeNode[], url?: string): boolean => {
+let isInTree = (url: string, nodes: chrome.bookmarks.BookmarkTreeNode[]): boolean => {
     while (nodes.length > 0) {
         let node: chrome.bookmarks.BookmarkTreeNode = nodes.pop()!;
         if (node.url) { // bookmark
@@ -130,11 +130,11 @@ let isInTree = (nodes: chrome.bookmarks.BookmarkTreeNode[], url?: string): boole
     return false;
 }
 
-let saveIfNotAlreadyThere = (webmarkFolderId: string, url?: string, title?: string): void => {
+let saveIfNotAlreadyThere = (webmarkFolderId: string, url: string, title: string): void => {
     chrome.bookmarks.getSubTree(
         webmarkFolderId,
         (results: chrome.bookmarks.BookmarkTreeNode[]): void => {
-            if (isInTree(results, url)) {
+            if (isInTree(url, results)) {
                 showNotice(constants.PAGE_ALREADY_EXISTS);
             }
             else {
@@ -145,7 +145,7 @@ let saveIfNotAlreadyThere = (webmarkFolderId: string, url?: string, title?: stri
     );
 }
 
-let saveWithConfidence = (webmarkFolderId: string, url?: string, title?: string): void => {
+let saveWithConfidence = (webmarkFolderId: string, url: string, title: string): void => {
     chrome.bookmarks.create(
         {
             'parentId': webmarkFolderId,
