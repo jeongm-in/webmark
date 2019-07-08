@@ -1,5 +1,5 @@
 import * as constants from './constants'
-import { createWebmarkFolder } from './index'
+import { createWebmarkFolder } from './utils'
 
 chrome.runtime.onInstalled.addListener(
     () => {
