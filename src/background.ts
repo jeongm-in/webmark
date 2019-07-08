@@ -1,22 +1,5 @@
 import * as constants from './constants'
-
-let createWebmarkFolder = (): void => {
-    chrome.bookmarks.create(
-        {
-            'title': constants.FOLDER_NAME,
-        },
-        (newFolder) => {
-            chrome.storage.sync.set(
-                {
-                    [constants.FOLDER_ID_KEY]: newFolder.id,
-                },
-                () => {
-                    console.log('set webmarkFolderId to ' + newFolder.id);
-                }
-            );
-        },
-    )
-};
+import { createWebmarkFolder } from './index'
 
 chrome.runtime.onInstalled.addListener(
     () => {
