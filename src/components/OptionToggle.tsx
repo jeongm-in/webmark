@@ -1,54 +1,66 @@
 import * as React from "react";
 import Toggle from 'react-toggle';
+import "react-toggle/style.css";
 
 export interface OptionToggleProps {
     optionLabel: string,
-    id: string
+    toggleFor: string
 }
-
-// chrome.function.load something set value
-// https://github.com/aaronshaf/react-toggle
 interface OptionToggleState {
-    id: string,
-    loadNewTab: boolean,
-    optionLabel: string
+    setting: boolean,
+}
+interface ChromeSettingObject {
+    [key: string]: any
 }
 
 class OptionToggle extends React.Component<OptionToggleProps, OptionToggleState> {
-
+    toggleFor: string;
+    optionLabel: string;
     constructor(props: OptionToggleProps) {
         super(props);
         this.state = {
-            loadNewTab: false,
-            optionLabel: props.optionLabel,
-            id: props.id
+            setting: true
         }
-
+        this.optionLabel = props.optionLabel;
+        this.toggleFor = props.toggleFor;
         this.handleChange = this.handleChange.bind(this);
     }
-    
-    
-    handleChange = () => {
 
+    handleChange = (): void => {
+        let updatedState: boolean = !this.state.setting;
+        let updatedSettingPair: ChromeSettingObject = {};
+        updatedSettingPair[this.props.toggleFor] = updatedState;
+
+        chrome.storage.sync.set(updatedSettingPair, (): void => {
+            this.setState(
+                { setting: updatedState }
+            );
+        }
+        );
     }
 
-
-    style = {
-        'white-space': 'nowrap'
-    } as React.CSSProperties;
+    componentDidMount(): void {
+        chrome.storage.sync.get(
+            [this.props.toggleFor],
+            (result): void => {
+                let status: boolean = Object.keys(result).length !== 0 && result![this.props.toggleFor];
+                this.setState(
+                    { setting: status }
+                );
+            }
+        );
+    }
 
     render() {
         return (
-            <div>
+            <label className="d-flex flex-row justify-content-between">
+                <span>{this.optionLabel}</span>
                 <Toggle
-                    id={this.state.id}
-                    defaultChecked={this.state.loadNewTab}
-                    onChange={this.handleChange.bind(this)} />
-                <label htmlFor='cheese-status'>{this.state.optionLabel}</label>
-            </div>
+                    checked={this.state.setting}
+                    icons={false}
+                    onChange={this.handleChange} />
+            </label>
         );
-
-
     }
 }
 

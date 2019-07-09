@@ -10,17 +10,11 @@ class Logo extends React.Component<Props> {
         super(props);
         this.image = props.image;
     }
-    style = {
-        'white-space': 'nowrap'
-    } as React.CSSProperties;
-    
+
     render() {
         return (
             <img src={this.image}></img>
         );
-
-
-
     }
 }
 
