@@ -4,6 +4,7 @@ module.exports = {
   mode: 'production',
   entry: {
     'background': './src/background.ts',
+    'option': './src/Option.tsx'
   },
   module: {
     rules: [
