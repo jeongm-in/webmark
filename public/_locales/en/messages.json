@@ -22,5 +22,11 @@
     },
     "saveSuccessful": {
         "message": "Page was saved successfully."
+    },
+    "optionsGeneralCardTitle": {
+        "message": "General"
+    },
+    "optionsIsLoadInNewTab": {
+        "message": "Load WebMark in current tab"
     }
 }
