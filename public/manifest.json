@@ -36,9 +36,9 @@
     }
   },
   "icons": {
-    "16": "images/default.png",
-    "48": "images/default.png",
-    "128": "images/default.png"
+    "16": "images/128.png",
+    "48": "images/128.png",
+    "128": "images/128.png"
   },
   "options_page": "options.html",
   "content_security_policy": "script-src 'self' 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'",
