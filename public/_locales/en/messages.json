@@ -28,5 +28,23 @@
     },
     "optionsIsLoadInNewTab": {
         "message": "Load WebMark in current tab"
+    },
+    "optionsAboutCardTitle": {
+        "message": "About"
+    },
+    "optionsAboutCardContentVersionTitle": {
+        "message": "Current version"
+    },
+    "optionsAboutCardContentTeamNameTitle": {
+        "message": "Author"
+    },
+    "optionsAboutCardContentTeamNameContent": {
+        "message": "strgzr"
+    },
+    "optionsAboutCardContentTeamLinkTitle": {
+        "message": "Homepage"
+    },
+    "optionsAboutCardContentTeamLinkContent": {
+        "message": "https://github.com/jeongm-in/webmark/"
     }
 }

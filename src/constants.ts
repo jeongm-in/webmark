@@ -15,3 +15,9 @@ export const SAVE_SUCCESSFUL: string = chrome.i18n.getMessage('saveSuccessful');
 // user-visible strings options page
 export const OPTIONS_GENERAL_CARD_TITLE: string = chrome.i18n.getMessage('optionsGeneralCardTitle');
 export const OPTIONS_IS_LOAD_IN_NEW_TAB: string = chrome.i18n.getMessage('optionsIsLoadInNewTab');
+export const OPTIONS_ABOUT_CARD_TITLE: string = chrome.i18n.getMessage('optionsAboutCardTitle');
+export const OPTIONS_ABOUT_VERSION_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentVersionTitle');
+export const OPTIONS_ABOUT_TEAM_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentTeamNameTitle');
+export const OPTIONS_ABOUT_TEAM_CONTENT: string = chrome.i18n.getMessage('optionsAboutCardContentTeamNameContent');
+export const OPTIONS_ABOUT_TEAM_LINK_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentTeamLinkTitle');
+export const OPTIONS_ABOUT_TEAM_LINK_CONTENT: string = chrome.i18n.getMessage('optionsAboutCardContentTeamLinkContent');
