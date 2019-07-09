@@ -9,7 +9,7 @@ class OptionPage extends React.Component {
     }
 
     backgroundStyle = {
-        backgroundColor: '#55efc4',
+        backgroundColor: '#DDDDDD',
     } as React.CSSProperties;
 
     render() {
