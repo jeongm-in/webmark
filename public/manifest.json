@@ -13,6 +13,28 @@
     "default_popup": "index.html",
     "default_icon": "images/default.png"
   },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "commands": {
+    "save": {
+      "suggested_key": {
+        "default": "Alt+S",
+        "mac": "Alt+S"
+      },
+      "description": "__MSG_saveButton__"
+    },
+    "load": {
+      "suggested_key": {
+        "default": "Alt+Q",
+        "mac": "Alt+Q"
+      },
+      "description": "__MSG_loadButton__"
+    }
+  },
   "icons": {
     "16": "images/default.png",
     "48": "images/default.png",
