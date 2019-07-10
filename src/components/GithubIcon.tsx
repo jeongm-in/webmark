@@ -1,14 +1,6 @@
 import * as React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import {
-    IconLookup,
-    IconDefinition,
-    findIconDefinition
-} from '@fortawesome/fontawesome-svg-core'
-
-library.add(faGithub);
+import { faGithub, faGit } from '@fortawesome/free-brands-svg-icons';
 
 class GithubIcon extends React.Component {
 
@@ -23,10 +15,8 @@ class GithubIcon extends React.Component {
     } as React.CSSProperties;
 
     render() {
-        const githubLookup: IconLookup = { prefix: 'fab', iconName: 'github' }
-        const githubIconDefinition: IconDefinition = findIconDefinition(githubLookup)
         return (
-            <FontAwesomeIcon icon={githubIconDefinition} style={this.iconStyle} />
+            <FontAwesomeIcon icon={faGithub} style={this.iconStyle} />
         );
     }
 }
