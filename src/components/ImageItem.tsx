@@ -4,7 +4,7 @@ export interface Props {
     image: string
 }
 
-class Logo extends React.Component<Props> {
+class ImageItem extends React.Component<Props> {
     image: string;
     constructor(props: Props) {
         super(props);
@@ -18,4 +18,4 @@ class Logo extends React.Component<Props> {
     }
 }
 
-export default Logo;
+export default ImageItem;
