@@ -11,7 +11,7 @@
   ],
   "browser_action": {
     "default_popup": "index.html",
-    "default_icon": "images/default.png"
+    "default_icon": "images/128.png"
   },
   "background": {
     "scripts": [
