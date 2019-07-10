@@ -95,7 +95,7 @@ let isInTree = (url: string, nodes: chrome.bookmarks.BookmarkTreeNode[]): boolea
     while (nodes.length > 0) {
         let node: chrome.bookmarks.BookmarkTreeNode = nodes.pop()!;
         if (node.url) { // bookmark
-            if (node.url == url) {
+            if (node.url === url) {
                 return true;
             }
         } else if (node.children) { // folder and has children
@@ -144,7 +144,7 @@ let loadRandomUrlFromFolder = (webmarkFolderId: string): void => {
             for (let node of bookmarkTreeNodes) {
                 recursiveUrlCollection(node, urlList);
             }
-            if (urlList.length == 0) {
+            if (urlList.length === 0) {
                 showNotice(FOLDER_EMPTY);
                 return;
             }
