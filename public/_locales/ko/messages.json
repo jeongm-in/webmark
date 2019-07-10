@@ -27,24 +27,18 @@
         "message": "일반 설정"
     },
     "optionsIsLoadInNewTab": {
-        "message": "저장된 페이지를 현재 창에서 열어요."
+        "message": "저장된 페이지를 현재 탭에서 열어요."
     },
     "optionsAboutCardTitle": {
         "message": "소개"
     },
-    "optionsAboutCardContentVersionText": {
+    "optionsAboutCardContentVersionTitle": {
         "message": "현재 버전"
     },
-    "optionsAboutCardContentTeamNameText": {
+    "optionsAboutCardContentTeamNameTitle": {
         "message": "만든이들"
-    },
-    "optionsAboutCardContentTeamNameValue": {
-        "message": "strgzr"
     },
     "optionsAboutCardContentTeamLinkTitle": {
         "message": "홈페이지"
-    },
-    "optionsAboutCardContentTeamLink": {
-        "message": "https://github.com/jeongm-in/webmark/"
     }
 }

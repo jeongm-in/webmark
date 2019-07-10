@@ -24,7 +24,7 @@
         "message": "Page was saved successfully."
     },
     "optionsGeneralCardTitle": {
-        "message": "General"
+        "message": "General Settings"
     },
     "optionsIsLoadInNewTab": {
         "message": "Load WebMark in current tab"
@@ -38,13 +38,7 @@
     "optionsAboutCardContentTeamNameTitle": {
         "message": "Author"
     },
-    "optionsAboutCardContentTeamNameContent": {
-        "message": "strgzr"
-    },
     "optionsAboutCardContentTeamLinkTitle": {
         "message": "Homepage"
-    },
-    "optionsAboutCardContentTeamLinkContent": {
-        "message": "https://github.com/jeongm-in/webmark/"
     }
 }

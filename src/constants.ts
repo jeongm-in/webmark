@@ -4,6 +4,11 @@
 export const FOLDER_ID_KEY: string = 'webmarkFolderId';
 export const LOAD_HERE_KEY: string = 'loadHere';
 
+// locale independent values
+export const OPTIONS_ABOUT_TEAM_LINK_GITHUB: string = 'https://github.com/jeongm-in/webmark/';
+export const OPTIONS_ABOUT_TEAM_LINK_GOOGLE_GROUP: string = 'https://groups.google.com/forum/#!forum/strgzrs';
+export const OPTIONS_ABOUT_TEAM_NAME: string = 'strgzr';
+
 // user-visible strings
 export const FOLDER_EMPTY: string = chrome.i18n.getMessage('folderEmpty');
 export const FOLDER_NAME: string = chrome.i18n.getMessage('folderName');
@@ -18,6 +23,5 @@ export const OPTIONS_IS_LOAD_IN_NEW_TAB: string = chrome.i18n.getMessage('option
 export const OPTIONS_ABOUT_CARD_TITLE: string = chrome.i18n.getMessage('optionsAboutCardTitle');
 export const OPTIONS_ABOUT_VERSION_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentVersionTitle');
 export const OPTIONS_ABOUT_TEAM_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentTeamNameTitle');
-export const OPTIONS_ABOUT_TEAM_CONTENT: string = chrome.i18n.getMessage('optionsAboutCardContentTeamNameContent');
-export const OPTIONS_ABOUT_TEAM_LINK_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentTeamLinkTitle');
-export const OPTIONS_ABOUT_TEAM_LINK_CONTENT: string = chrome.i18n.getMessage('optionsAboutCardContentTeamLinkContent');
+export const OPTIONS_ABOUT_HOMEPAGE_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentTeamLinkTitle');
+
