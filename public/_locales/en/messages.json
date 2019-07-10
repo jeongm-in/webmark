@@ -22,5 +22,23 @@
     },
     "saveSuccessful": {
         "message": "Page was saved successfully."
+    },
+    "optionsGeneralCardTitle": {
+        "message": "General Settings"
+    },
+    "optionsIsLoadInNewTab": {
+        "message": "Load WebMark in current tab"
+    },
+    "optionsAboutCardTitle": {
+        "message": "About"
+    },
+    "optionsAboutCardContentVersionTitle": {
+        "message": "Current version"
+    },
+    "optionsAboutCardContentTeamNameTitle": {
+        "message": "Author"
+    },
+    "optionsAboutCardContentTeamLinkTitle": {
+        "message": "Homepage"
     }
 }

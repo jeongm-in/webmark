@@ -22,5 +22,23 @@
     },
     "saveSuccessful": {
         "message": "성공적으로 저장했어요."
+    },
+    "optionsGeneralCardTitle": {
+        "message": "일반 설정"
+    },
+    "optionsIsLoadInNewTab": {
+        "message": "저장된 페이지를 현재 탭에서 열어요."
+    },
+    "optionsAboutCardTitle": {
+        "message": "소개"
+    },
+    "optionsAboutCardContentVersionTitle": {
+        "message": "현재 버전"
+    },
+    "optionsAboutCardContentTeamNameTitle": {
+        "message": "만든이들"
+    },
+    "optionsAboutCardContentTeamLinkTitle": {
+        "message": "홈페이지"
     }
 }
