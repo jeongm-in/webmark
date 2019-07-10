@@ -41,4 +41,3 @@ chrome.commands.onCommand.addListener(
         }
     }
 );
-
