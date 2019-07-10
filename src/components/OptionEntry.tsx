@@ -6,8 +6,10 @@ class OptionEntry extends React.Component {
     }
 
     render() {
+        let optionEntryClass = "d-flex flex-row justify-content-between";
+
         return (
-            <div className="d-flex flex-row justify-content-between">
+            <div className={optionEntryClass}>
                 {this.props.children}
             </div>
         );

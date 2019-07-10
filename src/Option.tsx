@@ -8,3 +8,4 @@ ReactDOM.render(
     <OptionPage />,
     document.getElementById('root') as HTMLElement
 );
+

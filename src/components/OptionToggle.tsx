@@ -52,8 +52,10 @@ class OptionToggle extends React.Component<OptionToggleProps, OptionToggleState>
     }
 
     render() {
+        let optionToggleClass = "d-flex flex-row justify-content-between";
+
         return (
-            <label className="d-flex flex-row justify-content-between">
+            <label className={optionToggleClass}>
                 <span>{this.optionLabel}</span>
                 <Toggle
                     checked={this.state.setting}
