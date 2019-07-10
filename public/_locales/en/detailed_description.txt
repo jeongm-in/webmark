@@ -1,0 +1,18 @@
+Load a random page from your bookmarks!
+
+More and more bookmarks going unvisited? Use WebMark to stop that! If you have a lot of bookmarks to visit later at some point (read: "never"), move or copy them to WebMark folder using Chrome's built-in bookmark manager (Ctrl+Shift+O on Windows/Linux, ⌘+Option+B on Mac, or just chrome://bookmarks). You can also save them as you go by clicking the save button you see once you click on the WebMark icon on the top right. Then when you're bored and need something to read, click on the load button to see a random page from WebMark folder!
+
+Notes:
+• You can rename or move the WebMark folder. However, we don't create a new one unless it is deleted.
+
+Features available:
+• Save bookmarks to WebMark folder
+• Load a random page from WebMark folder
+• Choose whether a page is loaded in the current tab or a new tab
+
+Features coming:
+• Use keyboard shortcuts to save and load bookmarks
+• Delete from WebMark folder once you finish reading the page
+• Open the webmark folder in bookmark manager
+
+If you have any questions, concerns, comments, or criticisms, please feel free to leave a review or reach us at strgzrs@googlegroups.com!
