@@ -180,7 +180,7 @@ let recursiveUrlCollection = (bookmark: chrome.bookmarks.BookmarkTreeNode, urlLi
     }
 }
 
-var showNotice = (title: string, message: string = ''): void => {
+let showNotice = (title: string, message: string = ''): void => {
     chrome.notifications.create(
         // notificationId intentionally not sent
         {
@@ -197,7 +197,7 @@ var showNotice = (title: string, message: string = ''): void => {
     console.log('Showed message ("' + title + '") to user.');
 }
 
-var loadInCurrentTab = (url: string): void => {
+let loadInCurrentTab = (url: string): void => {
     chrome.tabs.update(
         {
             'url': url,
@@ -206,7 +206,7 @@ var loadInCurrentTab = (url: string): void => {
     console.log('Opened ' + url + ' in the current tab.');
 }
 
-var loadInNewTab = (url: string): void => {
+let loadInNewTab = (url: string): void => {
     chrome.tabs.create(
         {
             'url': url,
