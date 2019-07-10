@@ -185,7 +185,7 @@ let showNotice = (title: string, message: string = ''): void => {
         // notificationId intentionally not sent
         {
             'type': 'basic', // required
-            'iconUrl': 'images/default.png', // required
+            'iconUrl': 'images/128.png', // required
             'title': title, // required
             'message': message, // required
             'eventTime': Date.now(),
