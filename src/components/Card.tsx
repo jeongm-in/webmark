@@ -1,14 +1,14 @@
 import * as React from "react";
 
 export interface Props {
-    title: string
+    textTitle: string
 }
 
 class Card extends React.Component<Props> {
-    title: string;
+    textTitle: string;
     constructor(props: Props) {
         super(props);
-        this.title = props.title;
+        this.textTitle = props.textTitle;
     }
 
     style = {
@@ -27,7 +27,7 @@ class Card extends React.Component<Props> {
     render() {
         return (
             <div style={this.style}>
-                <div style={this.textStyle}>{this.title}</div>
+                <div style={this.textStyle}>{this.textTitle}</div>
                 <hr></hr>
                 {this.props.children}
             </div>
