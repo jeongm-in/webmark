@@ -9,11 +9,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|mjs|jsx|ts|tsx)$/,
-        include: path.resolve(__dirname, 'node_modules'),
-        loader: require.resolve('babel-loader'),
-      },
-      {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
@@ -23,10 +18,8 @@ module.exports = {
       {
         // Preprocess 3rd party .css files located in node_modules
         test: /\.css$/,
-        include: /node_modules/,
         use: ['style-loader', 'css-loader'],
       }
-
     ]
   },
   resolve: {
