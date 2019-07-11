@@ -24,4 +24,3 @@ export const OPTIONS_ABOUT_CARD_TITLE: string = chrome.i18n.getMessage('optionsA
 export const OPTIONS_ABOUT_VERSION_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentVersionTitle');
 export const OPTIONS_ABOUT_TEAM_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentTeamNameTitle');
 export const OPTIONS_ABOUT_HOMEPAGE_TITLE: string = chrome.i18n.getMessage('optionsAboutCardContentTeamLinkTitle');
-
