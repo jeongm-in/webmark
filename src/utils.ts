@@ -6,22 +6,18 @@ export let saveClicked = (): void => {
         [FOLDER_ID_KEY],
         function (result) {
             if (Object.keys(result).length === 0) {
-                console.log('webmarkFolderId not found.');
                 createWebmarkFolder(saveClicked);
             }
             else {
-                console.log('webmarkFolderId found.');
                 let webmarkFolderId: string = result![FOLDER_ID_KEY];
                 chrome.bookmarks.get(
                     webmarkFolderId,
                     function () {
                         if (chrome.runtime.lastError) {
-                            console.log('webmark folder not found.');
                             createWebmarkFolder(saveClicked);
                             chrome.storage.sync.remove(FOLDER_ID_KEY);
                             return;
                         }
-                        console.log('webmark folder found.');
                         getCurrentUrlAndSave(webmarkFolderId);
                     }
                 );
@@ -35,24 +31,20 @@ export let loadClicked = (): void => {
         [FOLDER_ID_KEY],
         function (result) {
             if (Object.keys(result).length === 0) {
-                console.log('webmarkFolderId not found.');
                 createWebmarkFolder();
                 showNotice(FOLDER_EMPTY);
                 return;
             }
-            console.log('webmarkFolderId found.');
             let webmarkFolderId: string = result![FOLDER_ID_KEY];
             chrome.bookmarks.get(
                 webmarkFolderId,
                 function () {
                     if (chrome.runtime.lastError) {
-                        console.log('webmark folder not found.');
                         createWebmarkFolder();
                         showNotice(FOLDER_EMPTY);
                         chrome.storage.sync.remove(FOLDER_ID_KEY);
                         return;
                     }
-                    console.log('webmark folder found.');
                     loadRandomUrlFromFolder(webmarkFolderId);
                 }
             );
@@ -70,7 +62,6 @@ export let createWebmarkFolder = (callback?: () => void): void => {
                 {
                     [FOLDER_ID_KEY]: newFolder.id,
                 }, function () {
-                    console.log('set webmarkFolderId to ' + newFolder.id);
                     if (callback !== undefined) {
                         callback();
                     }
@@ -115,7 +106,6 @@ let saveIfNotAlreadyThere = (webmarkFolderId: string, url: string, title: string
                 showNotice(PAGE_ALREADY_EXISTS);
             }
             else {
-                console.log('Same page not found in the folder.');
                 saveWithConfidence(webmarkFolderId, url, title);
             }
         }
@@ -131,7 +121,6 @@ let saveWithConfidence = (webmarkFolderId: string, url: string, title: string): 
         },
         () => {
             showNotice(SAVE_SUCCESSFUL);
-            console.log(url + ' saved to folder.');
         }
     );
 }
@@ -189,12 +178,8 @@ let showNotice = (title: string, message: string = ''): void => {
             'title': title, // required
             'message': message, // required
             'eventTime': Date.now(),
-        },
-        function (notificationId: string) {
-            console.log(notificationId + ' notification sent.');
         }
     );
-    console.log('Showed message ("' + title + '") to user.');
 }
 
 let loadInCurrentTab = (url: string): void => {
@@ -203,7 +188,6 @@ let loadInCurrentTab = (url: string): void => {
             'url': url,
         }
     );
-    console.log('Opened ' + url + ' in the current tab.');
 }
 
 let loadInNewTab = (url: string): void => {
@@ -212,5 +196,4 @@ let loadInNewTab = (url: string): void => {
             'url': url,
         }
     );
-    console.log('Opened ' + url + ' in a new tab.');
 }
