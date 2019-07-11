@@ -23,6 +23,9 @@
     "saveSuccessful": {
         "message": "Page was saved successfully."
     },
+    "optionsPage": {
+        "message": "WebMark Options"
+    },
     "optionsGeneralCardTitle": {
         "message": "General Settings"
     },
