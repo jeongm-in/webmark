@@ -1,4 +1,5 @@
 [![WebMark is available in the Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_496x150.png "Click to check out WebMark in the Chrome Web Store")](https://chrome.google.com/webstore/detail/webmark/lffdekoedjmjgjgnimmgpbcignenpeif)
+
 Click the image above to check out WebMark in the Chrome Web Store
 
 # WebMark
