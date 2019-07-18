@@ -4,7 +4,7 @@ import { FOLDER_ID_KEY, FOLDER_EMPTY, FOLDER_NAME, PAGE_ALREADY_EXISTS, SAVE_SUC
 export let saveClicked = (): void => {
     chrome.storage.sync.get(
         [FOLDER_ID_KEY],
-        function (result) {
+        function (result: any) {
             if (Object.keys(result).length === 0) {
                 createWebmarkFolder(saveClicked);
             }
@@ -29,7 +29,7 @@ export let saveClicked = (): void => {
 export let loadClicked = (): void => {
     chrome.storage.sync.get(
         [FOLDER_ID_KEY],
-        function (result) {
+        function (result: any) {
             if (Object.keys(result).length === 0) {
                 createWebmarkFolder();
                 showNotice(FOLDER_EMPTY);
@@ -57,7 +57,7 @@ export let createWebmarkFolder = (callback?: () => void): void => {
         {
             'title': FOLDER_NAME,
         },
-        function (newFolder) {
+        function (newFolder: any) {
             chrome.storage.sync.set(
                 {
                     [FOLDER_ID_KEY]: newFolder.id,
@@ -147,7 +147,7 @@ let loadRandomUrlFromFolder = (webmarkFolderId: string): void => {
 let loadPage = (url: string): void => {
     chrome.storage.sync.get(
         [LOAD_HERE_KEY],
-        (result) => {
+        (result: any) => {
             if (Object.keys(result).length !== 0 && result![LOAD_HERE_KEY]) {
                 loadInCurrentTab(url);
             }
@@ -190,7 +190,7 @@ let loadInCurrentTab = (url: string): void => {
     );
 }
 
-let loadInNewTab = (url: string): void => {
+export let loadInNewTab = (url: string): void => {
     chrome.tabs.create(
         {
             'url': url,
