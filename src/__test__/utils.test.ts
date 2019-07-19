@@ -1,10 +1,32 @@
 import chrome from 'sinon-chrome';
 import { assert } from 'chai';
-import { loadInNewTab } from '../utils';
+import { loadInCurrentTab, loadInNewTab, } from '../utils';
 
 // taken from https://github.com/acvetkov/sinon-chrome/blob/master/examples/navigate.js, modified for TypeScript and our functions
 
-describe('utils.ts', function () {
+describe('loadInCurrentTab', function () {
+    const url = 'https://example.com/';
+
+    it('should open a new tab with the given url', function () {
+        assert.ok(chrome.tabs.update.notCalled,
+            'tabs.update should not be called'
+        );
+        loadInCurrentTab(url);
+        assert.ok(chrome.tabs.update.calledOnce,
+            'tabs.update should be called once'
+        );
+        assert.ok(
+            chrome.tabs.update.withArgs({ url }).calledOnce,
+            'tabs.update should be called once with specified args'
+        );
+    });
+
+    afterAll(function () {
+        chrome.flush();
+    });
+});
+
+describe('loadInNewTab', function () {
     const url = 'https://example.com/';
 
     it('should open a new tab with the given url', function () {
@@ -13,11 +35,11 @@ describe('utils.ts', function () {
         );
         loadInNewTab(url);
         assert.ok(chrome.tabs.create.calledOnce,
-            'tabs.create should be called'
+            'tabs.create should be called once'
         );
         assert.ok(
             chrome.tabs.create.withArgs({ url }).calledOnce,
-            'tabs.create should be called with specified args'
+            'tabs.create should be called once with specified args'
         );
     });
 

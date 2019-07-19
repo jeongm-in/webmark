@@ -182,7 +182,7 @@ let showNotice = (title: string, message: string = ''): void => {
     );
 }
 
-let loadInCurrentTab = (url: string): void => {
+export let loadInCurrentTab = (url: string): void => {
     chrome.tabs.update(
         {
             'url': url,
