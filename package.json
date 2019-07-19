@@ -53,5 +53,14 @@
     "chai": "^4.2.0",
     "sinon-chrome": "^3.0.1",
     "ts-jest": "^24.0.2"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "transform-es2015-modules-commonjs"
+        ]
+      }
+    }
   }
 }
