@@ -1,13 +1,17 @@
-import chrome from 'sinon-chrome';
+/**
+ * @author https://github.com/acvetkov
+ * @overview Test events
+ */
+
+import chrome from 'sinon-chrome'
 import { assert } from 'chai';
 import EventsModule from '../events';
 
-// taken from https://github.com/acvetkov/sinon-chrome, modified for TypeScript
+describe('events.js', function () {
 
-describe('events.ts', function () {
     beforeAll(function () {
-        new EventsModule();
-        (global as any).chrome = chrome;
+        global.chrome = chrome;
+        this.events = new EventsModule();
     });
 
     beforeEach(function () {
@@ -27,6 +31,6 @@ describe('events.ts', function () {
 
     afterAll(function () {
         chrome.flush();
-        delete (global as any).chrome;
+        delete global.chrome;
     });
 });

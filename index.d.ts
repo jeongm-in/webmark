@@ -28,6 +28,6 @@ declare namespace chrome.bookmarks {
     }
 }
 
-declare namespace chrome.i18n {
-    export function getMessage(messageName: string, substitutions?: any): string;
-}
+// declare namespace chrome.i18n {
+//     export function getMessage(messageName: string, substitutions?: any): string;
+// }

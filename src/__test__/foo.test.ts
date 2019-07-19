@@ -4,33 +4,37 @@ test('basic', () => {
     expect(sum()).toBe(0);
 });
 
-test('basic again', () => {
-    expect(sum(1, 2)).toBe(3);
+test('setupTests.js works', () => {
+    expect(a).toBe('a');
 });
 
-test('basic async', async () => {
-    expect(sum()).toBe(0);
-});
+// test('basic again', () => {
+//     expect(sum(1, 2)).toBe(3);
+// });
 
-test('basic async again',
-    async () => {
-        expect(sum(1, 2)).toBe(3);
-    },
-    1000 /* optional timeout */
-);
+// test('basic async', async () => {
+//     expect(sum()).toBe(0);
+// });
 
-test('callback receives correct argument',
-    done => {
-        function callback(data: string) {
-            expect(data).toBe('correct argument');
-            done();
-        }
+// test('basic async again',
+//     async () => {
+//         expect(sum(1, 2)).toBe(3);
+//     },
+//     1000 /* optional timeout */
+// );
 
-        fetchData(callback);
-    },
-    3000
-);
+// test('callback receives correct argument',
+//     done => {
+//         function callback(data: string) {
+//             expect(data).toBe('correct argument');
+//             done();
+//         }
 
-function fetchData(callback: (data: string) => void) {
-    callback('correct argument');
-}
+//         fetchData(callback);
+//     },
+//     3000
+// );
+
+// function fetchData(callback: (data: string) => void) {
+//     callback('correct argument');
+// }

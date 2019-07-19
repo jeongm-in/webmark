@@ -4,13 +4,17 @@ module.exports = {
     'roots': [
         '<rootDir>/src'
     ],
+    'setupFiles': ['<rootDir>/src/__test__/setupTests.js'],
     'transform': {
         '^.+\\.tsx?$': 'ts-jest',
-        "^.+\\.jsx?$": "babel-jest",
+        '^.+\\.jsx?$': 'babel-jest',
     },
-    "runner": "jest-runner-eslint",
-    // "setupFiles": ["<rootDir>src/setupTests.js"],
-    // "testEnvironment": "node",
+    // globals: {
+    //     'ts-jest': {
+    //         diagnostics: false
+    //     }
+    // }
+    // 'testEnvironment': 'node',
     // 'globals': {
     //     'chrome': {
     //         'i18n': {
