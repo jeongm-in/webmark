@@ -1,6 +1,5 @@
 // The following lines of code were copied from @types/chrome
 // because they are absent in @types/sinon-chrome
-
 declare namespace chrome.bookmarks {
     export interface BookmarkTreeNode {
         /** Optional. The 0-based position of this node within its parent folder.  */
@@ -27,7 +26,3 @@ declare namespace chrome.bookmarks {
         unmodifiable?: any;
     }
 }
-
-// declare namespace chrome.i18n {
-//     export function getMessage(messageName: string, substitutions?: any): string;
-// }
