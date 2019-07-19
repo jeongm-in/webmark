@@ -14,14 +14,14 @@ describe('events.ts', function () {
     });
 
     it('should subscribe on chrome.tabs.onUpdated', function () {
-        assert.ok(chrome.tabs.onUpdated.addListener.calledOnce);
+        assert.isTrue(chrome.tabs.onUpdated.addListener.calledOnce);
     });
 
     it('should send correct url on tabs updated event', function () {
-        assert.ok(chrome.runtime.sendMessage.notCalled);
+        assert.isTrue(chrome.runtime.sendMessage.notCalled);
         chrome.tabs.onUpdated.dispatch({ url: 'my-url' });
-        assert.ok(chrome.runtime.sendMessage.calledOnce);
-        assert.ok(chrome.runtime.sendMessage.withArgs('my-url').calledOnce);
+        assert.isTrue(chrome.runtime.sendMessage.calledOnce);
+        assert.isTrue(chrome.runtime.sendMessage.withArgs('my-url').calledOnce);
     });
 
     afterAll(function () {
