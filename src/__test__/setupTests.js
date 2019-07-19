@@ -1,5 +1,5 @@
 global.a = 'a';
-// Without the following line, the following error occurs
-// in the files imported into .test.ts files:
-// ReferenceError: chrome is not defined 
+// ReferenceError: chrome is not defined
+// occurs in the files imported into .test.ts files:
+// without the following line.
 global.chrome = require('sinon-chrome');

@@ -1,13 +1,9 @@
-import chrome from 'sinon-chrome'
+import chrome from 'sinon-chrome';
 import { assert } from 'chai';
 import { navigate, navigationTarget } from '../navigate';
 
 describe('navigate.ts', function () {
     const url = 'http://my-domain.com';
-
-    beforeAll(function () {
-        (global as any).chrome = chrome;
-    });
 
     it('should navigate to new window', function () {
         assert.ok(chrome.windows.create.notCalled,
@@ -27,6 +23,5 @@ describe('navigate.ts', function () {
 
     afterAll(function () {
         chrome.flush();
-        delete (global as any).chrome;
     });
 });

@@ -3,7 +3,7 @@
  * @overview Test events
  */
 
-import chrome from 'sinon-chrome'
+import chrome from 'sinon-chrome';
 import { assert } from 'chai';
 import EventsModule from '../events';
 

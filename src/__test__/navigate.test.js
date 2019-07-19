@@ -3,7 +3,7 @@
  * @overview Test navigate.js
  */
 
-import chrome from 'sinon-chrome'
+import chrome from 'sinon-chrome';
 import { assert } from 'chai';
 import { navigate, navigationTarget } from '../navigate.js';
 

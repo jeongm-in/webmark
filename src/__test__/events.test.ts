@@ -7,7 +7,6 @@ import EventsModule from '../events';
 describe('events.ts', function () {
     beforeAll(function () {
         new EventsModule();
-        (global as any).chrome = chrome;
     });
 
     beforeEach(function () {
@@ -27,6 +26,5 @@ describe('events.ts', function () {
 
     afterAll(function () {
         chrome.flush();
-        delete (global as any).chrome;
     });
 });
