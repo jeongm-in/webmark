@@ -5,6 +5,7 @@ test('basic', () => {
 });
 
 test('setupTests.js works', () => {
+    // Modify globals.d.ts & ts.config.json when you remove this test
     expect(a).toBe('a');
 });
 
