@@ -2,8 +2,6 @@ import chrome from 'sinon-chrome';
 import { assert } from 'chai';
 import { loadInCurrentTab, loadInNewTab, } from '../utils';
 
-// taken from https://github.com/acvetkov/sinon-chrome/blob/master/examples/navigate.js, modified for TypeScript and our functions
-
 describe('loadInCurrentTab', function () {
     const url = 'https://example.com/';
 
