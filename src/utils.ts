@@ -182,7 +182,7 @@ let showNotice = (title: string, message: string = ''): void => {
     );
 }
 
-let loadInCurrentTab = (url: string): void => {
+export let loadInCurrentTab = (url: string): void => {
     chrome.tabs.update(
         {
             'url': url,
@@ -190,7 +190,7 @@ let loadInCurrentTab = (url: string): void => {
     );
 }
 
-let loadInNewTab = (url: string): void => {
+export let loadInNewTab = (url: string): void => {
     chrome.tabs.create(
         {
             'url': url,
