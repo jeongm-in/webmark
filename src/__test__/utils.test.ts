@@ -5,7 +5,7 @@ import { loadInCurrentTab, loadInNewTab, } from '../utils';
 describe('loadInCurrentTab', function () {
     const url = 'https://example.com/';
 
-    it('should open a new tab with the given url', function () {
+    it('should open the given url in the current tab', function () {
         assert.isTrue(chrome.tabs.update.notCalled,
             'tabs.update should not be called'
         );
