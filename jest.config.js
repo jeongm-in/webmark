@@ -8,5 +8,10 @@ module.exports = {
         '^.+\\.tsx?$': 'ts-jest',
         '^.+\\.jsx?$': 'babel-jest',
     },
+    globals: {
+        'ts-jest': { // need a tsconfig with jsx: react
+            tsConfig: '<rootDir>/tsconfig.other.json'
+        }
+    },
     collectCoverage: true,
 }

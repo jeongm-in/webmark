@@ -24,3 +24,6 @@ yarn-error.log*
 
 # VS Code
 .vscode
+
+# jest snapshots
+src/__test__/__snapshots__/*.snap
